@@ -160,6 +160,19 @@ td .up{color:var(--good)}td .dn{color:var(--bad)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 /* ---------- 手机单屏布局 · single-screen phone layout ---------- */
 .tablewrap{overflow-x:auto;max-width:100%}
+.tg{display:inline-block;font-size:11px;padding:0 6px;border-radius:9px;margin:1px 3px 1px 0;line-height:17px;font-weight:500;white-space:nowrap;font-style:normal}
+.tg.m{background:#dbe6cf;color:#2f5428}.tg.f{background:#f2d4cf;color:#8a2a22}.tg.c{background:#e4e0d4;color:#5c554a}
+.off{border:1px solid var(--line);background:var(--paper);border-radius:4px;padding:8px 10px;margin-top:6px}
+.off.cur{border-left:4px solid var(--slate)}
+.offh{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}.offh b{font-size:15px}.offh span{font-size:12px;color:var(--ink-2)}
+.offt{font-size:12.5px;margin-top:3px}.offt small{color:var(--ink-2)}
+.offw{font-size:12px;color:var(--ink-2);margin-top:3px}
+.off .tool{margin-top:6px;width:100%}
+.hrh{font-family:var(--font-display);color:var(--slate);margin:12px 0 2px;font-size:15px}
+.hrtg{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;margin:4px 0}
+.hrsum{margin:10px 0 6px;font-size:13px}.hrl{padding:2px 0}
+.hrgo{width:100%}
+.tool.hot{border-color:var(--ochre);background:#f6e7c8}
 .mhead,.tabbar,.subseg{display:none}
 .gos{display:none}
 .mapbtn{display:none}
@@ -317,7 +330,7 @@ html:not([lang^="zh"]) .log p{padding-left:0;text-indent:0}
  <div class="cloth"><span class="lab" data-t="labCloth"></span><span id="clothNote" class="hint" style="display:inline"></span></div>
 </div>
 <h2><span data-t="hRegions"></span><span class="hint" data-t="hRegionsHint"></span></h2>
-<div class="tools"><button class="tool" id="autoMove" data-t="autoMove"></button><button class="tool" id="clearMove" data-t="clearMove"></button><button class="tool mapbtn" id="mapToggle" aria-expanded="false"></button></div>
+<div class="tools"><button class="tool" id="autoMove" data-t="autoMove"></button><button class="tool" id="clearMove" data-t="clearMove"></button><button class="tool mapbtn" id="mapToggle" aria-expanded="false"></button><button class="tool" id="hrBtn"></button></div>
 <canvas class="art mapc" id="map" width="760" height="360" role="img"></canvas>
 <div class="tablewrap"><table id="regions"></table></div>
 <p class="hint" id="moveHint"></p>
@@ -457,7 +470,7 @@ STR.zh={
  <p><b>工业是条链。</b>煤电不够，钢铁、水泥、纺织一起降开工；钢铁机械顺带产农机，农机多了耕地增产；教育卫生培养技术员，技术员不够厂矿效率低；畜牧出肉也出羊毛，羊毛进纺织。</p>
  <p><b>东疆的长处。</b>坎儿井取地下水，旱年减产只有一半；吐鲁番葡萄干、哈密瓜每年优先上调，换回信任和一点建材，也改善当地生活；兰新铁路经过哈密，调入东疆的粮食几乎没有损耗。东疆的水利投入回报最高。</p>
  <p><b>上报决定征购。</b>征购按上报数扣，不看实产；加码上报换信任，但会挤口粮，还可能被核查。五年指标按实产考核，报得越高任务越重。</p>
- <p><b>重点工程与人事。</b>跨年工程每年投一次算一年进度，停了不罚只是拖；每届五年计划可调换一位地区专员，专员的派别会悄悄改变本地区的产量、用工和上报数字。</p>
+ <p><b>重点工程与人事。</b>跨年工程每年投一次算一年进度，停了不罚只是拖。“官员名单”里每位干部有一项长处、一项短处；每个五年计划期可以从候选干部中挑一人任命到指定地区，撤下的人不再复用。</p>
  <p><b>快捷操作。</b>“本年要点”列出最紧迫的问题；“自动调粮”按各地缺口安排调拨；“沿用上年安排”在物资允许的范围内重复上年的建设；底部执行栏随时显示物资余额。</p>
  <p><b>撤职线。</b>任一地区民生低于 8、全区民生低于 15、中央信任低于 10。</p>`,
  // 开局
@@ -479,7 +492,11 @@ STR.zh={
  keepL:x=>`长期占用劳动力 ${x}`, autoMove:`自动调粮`, clearMove:`清空调拨`, repeatInv:`沿用上年安排`, clearInv:`清空建设安排`,
  tAutoNone:`各地口粮都够，不需要调粮。`, tAutoDone:x=>`<span class="ok">已按缺口安排调粮 ${x}。</span>`, tRepeatPart:`上年安排超出本年物资，已按顺序尽量沿用。`, tRepeatNone:`没有上年安排可以沿用。`,
  dockMove:`调拨`, dockOk:`已平衡`, whyMat:`钢材或水泥超支`, whyLab:`劳动力超支`, whyMove:`调拨未平衡`, whyIdle:`本年尚未安排建设，结余的一半会转入下年`, dockLabel:`本年物资余额与执行`,
- mTrust:`信任`, mWel:`民生`, mStock:`粮储`, mPop:`人口`, goShort:`执行本年计划`, tabOv:`概况`, tabGrain:`粮食`, tabBuild:`建设`, tabLog:`记录`, mapShow:`显示地图`, mapHide:`收起地图`, menuTitle:`菜单`,
+ mTrust:`信任`, mWel:`民生`, mStock:`粮储`, mPop:`人口`, goShort:`执行本年计划`, hrBtn:`官员名单`, hrTitle:`官员名单`, hrRuleOn:p=>`${p}期间可任免一位地区专员（中央信任 −2）。`, hrRuleOff:`本届计划期的任免已用完，下一个五年计划再调整。`,
+ hrCur:`现任专员`, hrCands:`候选干部`, hrTo:`任命到`, hrAppoint:r=>`任命为${r}专员`, hrAge:a=>`${a} 岁`, hrTen:y=>`任职 ${y} 年`, hrNone:`暂无可用候选人。`,
+ hrOpen:`打开官员名单`, hrCanOne:`本届可任免一位`, tHR:r=>`<span class="ok">${rn(r)}专员已任命。</span>`,
+ logIll:(r,a,b)=>`${rn(r)}专员${on(a)}因病离任，${on(b)}接任。`, advHR:(r,n,f)=>`${rn(r)}专员${on(n)}${tx(FLAWS[f].name)}，本届还可以在“官员名单”里换人。`,
+ tabOv:`概况`, tabGrain:`粮食`, tabBuild:`建设`, tabLog:`记录`, mapShow:`显示地图`, mapHide:`收起地图`, menuTitle:`菜单`,
  rsTitle:`重新开始？`, rsText:`当前进度将被清除。`, rsYes:`清除并重新开始`, rsNo:`继续当前任期`,
 };
 
@@ -572,7 +589,7 @@ STR.en={
  <p><b>Industry is a chain.</b> Short of coal and power, steel, cement and textiles all slow down. Steel and machinery also turn out farm machinery, which lifts farm yields. Education and health train technicians, and without enough of them plants run inefficiently. Herding yields meat and also wool, which feeds the textile mills.</p>
  <p><b>The east's strengths.</b> Karez wells draw on groundwater, so dry years cost only half the usual harvest. Turpan raisins and Hami melons are shipped out first every year, earning trust and some building materials and improving local life. The Lanxin Railway runs through Hami, so grain sent to the east arrives almost without loss. Irrigation pays off best in the east.</p>
  <p><b>Reports set procurement.</b> Procurement is taken on reported output, not real output. Padding reports wins trust but squeezes rations and may trigger an audit. Five-year targets are judged on real output, and the higher you report, the heavier the quotas.</p>
- <p><b>Key projects and personnel.</b> Each year you fund a multi-year project counts as a year of progress; pausing costs nothing but time. Each five-year plan you may replace one regional commissioner, and a commissioner's leanings quietly change the region's output, labour use and reported figures.</p>
+ <p><b>Key projects and personnel.</b> Each year you fund a multi-year project counts as a year of progress; pausing costs nothing but time. In “Officials” every cadre has one strength and one weakness; once per five-year plan you may pick a candidate and appoint them to a region of your choice, and anyone you remove does not return.</p>
  <p><b>Shortcuts.</b> “This year's priorities” lists the most urgent problems; “Auto-transfer grain” arranges transfers to cover each region's shortfall; “Repeat last year's plan” repeats last year's construction as far as materials allow; the bar at the bottom always shows what is left.</p>
  <p><b>Dismissal lines.</b> Any region's livelihood below 8, overall livelihood below 15, or central trust below 10.</p>`,
  ngTitle:`Appointment`, ngText:`You have been appointed director of the Planning Commission of Xinjiang Province (an autonomous region from 1955). The province has fewer than five million people, spread across three great areas: the north, the south and the east. There is no market here: steel and cement are allocated by the Centre against quotas, crude oil and cotton are delivered under state purchase quotas, and grain is bought and sold by the state and issued by ration. You must draw up the material balances and choose between water, land, people and transport until 1977.`,
@@ -593,7 +610,11 @@ STR.en={
  keepL:x=>`ties up ${x} of labour`, autoMove:`Auto-transfer grain`, clearMove:`Clear transfers`, repeatInv:`Repeat last year's plan`, clearInv:`Clear construction`,
  tAutoNone:`Every region has enough grain; no transfer needed.`, tAutoDone:x=>`<span class="ok">Transfers arranged to cover shortfalls: ${x}.</span>`, tRepeatPart:`Last year's plan exceeds this year's materials; as much as possible was repeated, in order.`, tRepeatNone:`There is no previous plan to repeat.`,
  dockMove:`Transfers`, dockOk:`balanced`, whyMat:`Steel or cement over budget`, whyLab:`Labour over budget`, whyMove:`Transfers unbalanced`, whyIdle:`Nothing built yet this year; half of what is unused carries over`, dockLabel:`This year's remaining materials and execute`,
- mTrust:`Trust`, mWel:`Living`, mStock:`Grain kt`, mPop:`Pop.`, goShort:`Execute year`, tabOv:`Overview`, tabGrain:`Grain`, tabBuild:`Build`, tabLog:`Record`, mapShow:`Show map`, mapHide:`Hide map`, menuTitle:`Menu`,
+ mTrust:`Trust`, mWel:`Living`, mStock:`Grain kt`, mPop:`Pop.`, goShort:`Execute year`, hrBtn:`Officials`, hrTitle:`Officials`, hrRuleOn:p=>`During the ${p} you may appoint one regional commissioner (central trust −2).`, hrRuleOff:`This plan period's appointment has been used; you can change again in the next five-year plan.`,
+ hrCur:`Serving commissioners`, hrCands:`Candidates`, hrTo:`Appoint to`, hrAppoint:r=>`Appoint to ${r}`, hrAge:a=>`age ${a}`, hrTen:y=>`${y} yrs in post`, hrNone:`No candidates available.`,
+ hrOpen:`Open the officials list`, hrCanOne:`one appointment available`, tHR:r=>`<span class="ok">New ${rn(r)} commissioner appointed.</span>`,
+ logIll:(r,a,b)=>`${rn(r)} commissioner ${on(a)} leaves through illness; ${on(b)} takes over.`, advHR:(r,n,f)=>`${rn(r)} commissioner ${on(n)} is ${tx(FLAWS[f].name).toLowerCase()}; you can still replace one commissioner this plan period under “Officials”.`,
+ tabOv:`Overview`, tabGrain:`Grain`, tabBuild:`Build`, tabLog:`Record`, mapShow:`Show map`, mapHide:`Hide map`, menuTitle:`Menu`,
  rsTitle:`Restart?`, rsText:`Current progress will be cleared.`, rsYes:`Clear and restart`, rsNo:`Continue current term`,
 };
 
@@ -686,7 +707,7 @@ STR.pt={
  <p><b>A indústria é uma cadeia.</b> Sem carvão e energia suficientes, aço, cimento e têxteis abrandam todos. A siderurgia também produz maquinaria agrícola, que aumenta os rendimentos. A educação e saúde formam técnicos, e sem técnicos suficientes as fábricas rendem pouco. A pecuária dá carne e também lã, que alimenta os têxteis.</p>
  <p><b>Os pontos fortes do Leste.</b> Os poços karez captam água subterrânea, por isso os anos secos custam só metade da colheita habitual. As passas de Turpan e os melões de Hami são escoados primeiro todos os anos, rendendo confiança e algum material de construção e melhorando a vida local. A ferrovia Lanxin passa por Hami, por isso o cereal enviado para o Leste chega quase sem perdas. A rega compensa mais no Leste.</p>
  <p><b>As declarações fixam a requisição.</b> A requisição incide sobre a produção declarada, não a real. Inflacionar ganha confiança, mas aperta as rações e pode provocar uma auditoria. As metas quinquenais avaliam-se pela produção real, e quanto mais alto declarares, mais pesadas as quotas.</p>
- <p><b>Projetos-chave e pessoal.</b> Cada ano em que financias um projeto plurianual conta como um ano de progresso; parar só custa tempo. Em cada plano quinquenal podes substituir um comissário regional, e as inclinações do comissário alteram discretamente a produção, a mão de obra e os números declarados da região.</p>
+ <p><b>Projetos-chave e pessoal.</b> Cada ano em que financias um projeto plurianual conta como um ano de progresso; parar só custa tempo. Em “Quadros” cada quadro tem um ponto forte e um ponto fraco; uma vez por plano quinquenal podes escolher um candidato e nomeá-lo para a região que quiseres, e quem for afastado não volta.</p>
  <p><b>Atalhos.</b> As “Prioridades do ano” listam os problemas mais urgentes; “Transferir cereal automaticamente” organiza as transferências para cobrir a falta de cada região; “Repetir o plano do ano passado” repete a construção do ano anterior na medida do possível; a barra no fundo mostra sempre o que resta.</p>
  <p><b>Limites de destituição.</b> Bem-estar de qualquer região abaixo de 8, bem-estar global abaixo de 15 ou confiança do Centro abaixo de 10.</p>`,
  ngTitle:`Nomeação`, ngText:`Foste nomeado diretor da Comissão de Planeamento da Província de Xinjiang (região autónoma a partir de 1955). A província tem menos de cinco milhões de habitantes, repartidos por três grandes zonas: Norte, Sul e Leste. Aqui não há mercado: o aço e o cimento são atribuídos pelo Centro segundo quotas, o petróleo bruto e o algodão são entregues segundo quotas de compra estatal, e o cereal é comprado e vendido pelo Estado e distribuído por ração. Terás de elaborar os balanços materiais e escolher entre água, terra, pessoas e transportes até 1977.`,
@@ -707,7 +728,11 @@ STR.pt={
  keepL:x=>`ocupa ${x} de mão de obra`, autoMove:`Transferir cereal automaticamente`, clearMove:`Limpar transferências`, repeatInv:`Repetir o plano do ano passado`, clearInv:`Limpar construção`,
  tAutoNone:`Todas as regiões têm cereal suficiente; não é preciso transferir.`, tAutoDone:x=>`<span class="ok">Transferências organizadas para cobrir as faltas: ${x}.</span>`, tRepeatPart:`O plano do ano passado excede os materiais deste ano; repetiu-se o possível, por ordem.`, tRepeatNone:`Não há plano anterior para repetir.`,
  dockMove:`Transferências`, dockOk:`equilibradas`, whyMat:`Aço ou cimento acima do orçamento`, whyLab:`Mão de obra acima do orçamento`, whyMove:`Transferências desequilibradas`, whyIdle:`Ainda nada construído este ano; metade do que não for usado transita`, dockLabel:`Materiais restantes do ano e execução`,
- mTrust:`Confiança`, mWel:`Bem-estar`, mStock:`Cereal kt`, mPop:`Pop.`, goShort:`Executar ano`, tabOv:`Resumo`, tabGrain:`Cereal`, tabBuild:`Construir`, tabLog:`Registo`, mapShow:`Mostrar mapa`, mapHide:`Ocultar mapa`, menuTitle:`Menu`,
+ mTrust:`Confiança`, mWel:`Bem-estar`, mStock:`Cereal kt`, mPop:`Pop.`, goShort:`Executar ano`, hrBtn:`Quadros`, hrTitle:`Lista de quadros`, hrRuleOn:p=>`Durante o ${p} podes nomear um comissário regional (confiança do Centro −2).`, hrRuleOff:`A nomeação deste período já foi usada; podes mudar de novo no próximo plano quinquenal.`,
+ hrCur:`Comissários em funções`, hrCands:`Candidatos`, hrTo:`Nomear para`, hrAppoint:r=>`Nomear para ${r}`, hrAge:a=>`${a} anos`, hrTen:y=>`${y} anos no cargo`, hrNone:`Não há candidatos disponíveis.`,
+ hrOpen:`Abrir a lista de quadros`, hrCanOne:`uma nomeação disponível`, tHR:r=>`<span class="ok">Novo comissário nomeado: ${rn(r)}.</span>`,
+ logIll:(r,a,b)=>`${rn(r)}: ${NAMES[a].f?'a':'o'} ${comPT(a)} ${on(a)} sai por doença; assume ${on(b)}.`, advHR:(r,n,f)=>`${rn(r)}: ${NAMES[n].f?'a':'o'} ${comPT(n)} ${on(n)} é ${tx(FLAWS[f].name).toLowerCase()}; ainda podes substituir um comissário neste período em “Quadros”.`,
+ tabOv:`Resumo`, tabGrain:`Cereal`, tabBuild:`Construir`, tabLog:`Registo`, mapShow:`Mostrar mapa`, mapHide:`Ocultar mapa`, menuTitle:`Menu`,
  rsTitle:`Recomeçar?`, rsText:`O progresso atual será apagado.`, rsYes:`Apagar e recomeçar`, rsNo:`Continuar o mandato atual`,
 };
 
@@ -1184,21 +1209,44 @@ const PROJECTS=[
  {id:'srail',name:{zh:'南疆铁路（吐鲁番—库尔勒）',en:'Southern Xinjiang Railway (Turpan–Korla)',pt:'Ferrovia do Sul de Xinjiang (Turpan–Korla)'},sub:{zh:'1974 年动工',en:'construction began in 1974',pt:'obras iniciadas em 1974'},from:1971,years:5,cost:[5,3,10],
   eff:{zh:'交通 +3，调拨运力 +15',en:'Transport +3; transfer capacity +150 kt',pt:'Transportes +3; capacidade de transferência +150 kt'},apply:()=>{sec('rail').lvl+=3;S.flags.srail=1;}},
 ];
-const TRAITS={
- water:{name:{zh:'水利派',en:'Irrigation advocate',pt:'Defensor da rega'},d:{zh:'本地区水利工程效果 +20%',en:'Irrigation works here are 20% more effective',pt:'Obras de rega na região 20% mais eficazes'}},
- grain:{name:{zh:'抓粮派',en:'Grain first',pt:'Cereal primeiro'},d:{zh:'本地区粮食产量 +6%',en:'Regional grain output +6%',pt:'Produção regional de cereal +6%'}},
- welfare:{name:{zh:'务实派',en:'Pragmatist',pt:'Pragmático'},d:{zh:'本地区民生 +4',en:'Regional livelihood +4',pt:'Bem-estar regional +4'}},
- boast:{name:{zh:'浮夸派',en:'Exaggerator',pt:'Exagerador'},d:{zh:'本地区上报数自动加一成，不论口径',en:'Adds 10% to reported output, whatever the policy',pt:'Acrescenta 10% à produção declarada, seja qual for a política'}},
- slow:{name:{zh:'稳慎派',en:'Cautious',pt:'Prudente'},d:{zh:'本地区建设用工 +20%，但旱年减产少三成',en:'Construction labour here +20%, but drought losses cut by 30%',pt:'Mão de obra de construção +20% aqui, mas perdas na seca −30%'}},
+const TRAITS={ // 长处 · merits
+ water:{name:{zh:'水利派',en:'Irrigation expert',pt:'Perito em rega'},d:{zh:'本地区水利工程效果 +20%',en:'Irrigation works here are 20% more effective',pt:'Obras de rega na região 20% mais eficazes'}},
+ grain:{name:{zh:'抓粮能手',en:'Grain-first',pt:'Cereal primeiro'},d:{zh:'本地区粮食产量 +5%',en:'Regional grain output +5%',pt:'Produção regional de cereal +5%'}},
+ welfare:{name:{zh:'联系群众',en:'Close to the people',pt:'Próximo do povo'},d:{zh:'本地区民生 +3',en:'Regional livelihood +3',pt:'Bem-estar regional +3'}},
+ slow:{name:{zh:'稳慎持重',en:'Steady hand',pt:'Mão firme'},d:{zh:'本地区旱年减产少三成',en:'Drought losses here cut by 30%',pt:'Perdas na seca na região −30%'}},
+ tech:{name:{zh:'懂技术',en:'Technically trained',pt:'Formação técnica'},d:{zh:'每年多培养技术员 0.3 万人',en:'Trains 3k extra technicians a year',pt:'Forma mais 3 mil técnicos por ano'}},
+ logi:{name:{zh:'善调度',en:'Good organiser',pt:'Bom organizador'},d:{zh:'调入本地区的粮食几乎无损耗；调拨运力 +4 万吨',en:'Grain sent here arrives almost without loss; transfer capacity +40 kt',pt:'O cereal enviado para cá chega quase sem perdas; capacidade de transferência +40 kt'}},
 };
+const FLAWS={ // 短处 · flaws
+ boast:{name:{zh:'好大喜功',en:'Boastful',pt:'Fanfarrão'},d:{zh:'本地区上报数自动加一成，不论口径',en:'Adds 10% to reported output, whatever the policy',pt:'Acrescenta 10% à produção declarada, seja qual for a política'}},
+ bureau:{name:{zh:'官僚作风',en:'Bureaucratic',pt:'Burocrático'},d:{zh:'本地区建设用工 +30%',en:'Construction labour here +30%',pt:'Mão de obra de construção na região +30%'}},
+ harsh:{name:{zh:'作风粗暴',en:'Heavy-handed',pt:'Autoritário'},d:{zh:'本地区民生 −5',en:'Regional livelihood −5',pt:'Bem-estar regional −5'}},
+ parochial:{name:{zh:'本位主义',en:'Parochial',pt:'Bairrista'},d:{zh:'从本地区调出粮食，多损耗 12%',en:'Grain sent out of the region loses an extra 12%',pt:'O cereal enviado para fora da região perde mais 12%'}},
+ ill:{name:{zh:'体弱多病',en:'In poor health',pt:'Saúde frágil'},d:{zh:'每年约 10% 可能因病离任',en:'About a 10% chance a year of leaving through illness',pt:'Cerca de 10% de probabilidade anual de sair por doença'}},
+ mediocre:{name:{zh:'能力平平',en:'Mediocre',pt:'Medíocre'},d:{zh:'长处的效果减半',en:'Their strength works at half effect',pt:'O ponto forte vale metade'}},
+ clean:{name:{zh:'清廉无大过',en:'No real faults',pt:'Sem defeitos de monta'},d:{zh:'没有明显短处',en:'No notable weakness',pt:'Sem fraquezas notáveis'}},
+};
+const BGS={local:{zh:'本地干部',en:'Local cadre',pt:'Quadro local'},south:{zh:'南下干部',en:'Sent from the interior',pt:'Vindo do interior'},corps:{zh:'兵团转业',en:'Ex-Corps officer',pt:'Ex-oficial do Corpo'},techbg:{zh:'技术干部',en:'Technical cadre',pt:'Quadro técnico'}};
 const NAMES=[{zh:'马建国',la:'Ma Jianguo'},{zh:'库尔班·托乎提',la:'Kurban Tohti'},{zh:'赵文山',la:'Zhao Wenshan'},{zh:'热依汗·阿不来提',la:'Reyhan Ablet',f:1},
  {zh:'李守田',la:'Li Shoutian'},{zh:'艾山·买买提',la:'Hesen Memet'},{zh:'周振邦',la:'Zhou Zhenbang'},{zh:'古丽尼莎·卡德尔',la:'Gulnisa Qadir',f:1},
- {zh:'陈汉章',la:'Chen Hanzhang'},{zh:'吐尔逊·尼亚孜',la:'Tursun Niyaz'},{zh:'刘敬之',la:'Liu Jingzhi'},{zh:'阿依古丽·阿不都',la:'Aygul Abdu',f:1}];
+ {zh:'陈汉章',la:'Chen Hanzhang'},{zh:'吐尔逊·尼亚孜',la:'Tursun Niyaz'},{zh:'刘敬之',la:'Liu Jingzhi'},{zh:'阿依古丽·阿不都',la:'Aygul Abdu',f:1},
+ {zh:'王秀兰',la:'Wang Xiulan',f:1},{zh:'努尔兰·哈山',la:'Nurlan Hasen'},{zh:'张振华',la:'Zhang Zhenhua'},{zh:'帕提古丽·吾斯曼',la:'Patigul Osman',f:1},
+ {zh:'吴德昌',la:'Wu Dechang'},{zh:'阿不都热依木·沙吾提',la:'Abdurehim Sawut'}];
 const on=i=>ZH()?NAMES[i].zh:NAMES[i].la;
 const comPT=i=>NAMES[i].f?'comissária':'comissário';
-function newOfficer(usedIdx){ const pool=NAMES.map((_,i)=>i).filter(i=>!usedIdx.includes(i)); const keys=Object.keys(TRAITS); return {n:pick(pool.length?pool:NAMES.map((_,i)=>i)),trait:pick(keys),since:S.year}; }
-function initOfficers(){ S.officers={}; const used=[]; R.forEach(r=>{ const o=newOfficer(used); used.push(o.n); S.officers[r]=o; }); }
-const tr=(r,t)=>S.officers&&S.officers[r]&&S.officers[r].trait===t;
+function makePool(){ const mk=Object.keys(TRAITS), fl=['boast','bureau','harsh','parochial','ill','mediocre'];
+ S.pool=NAMES.map((_,i)=>({n:i,trait:pick(mk),flaw:Math.random()<0.1?'clean':pick(fl),bg:pick(Object.keys(BGS)),born:S.year-(30+Math.floor(Math.random()*22))})); S.retired=[]; }
+const prof=n=>({...S.pool[n]});
+const serving=()=>R.map(r=>S.officers[r].n);
+function newOfficer(exclude){ if(!S.pool) makePool(); const ex=new Set([...(exclude||[]),...(S.retired||[])]); let c=S.pool.filter(x=>!ex.has(x.n)); if(!c.length) c=S.pool.filter(x=>!(exclude||[]).includes(x.n)); return {...pick(c),since:S.year}; }
+function initOfficers(){ if(!S.pool) makePool(); S.officers={}; const used=[]; R.forEach(r=>{ const o=newOfficer(used); used.push(o.n); S.officers[r]=o; }); }
+const tr=(r,t)=>!!(S.officers&&S.officers[r]&&(S.officers[r].trait===t||S.officers[r].flaw===t));
+const mf=r=>tr(r,'mediocre')?0.5:1;
+const curPeriod=()=>1953+5*Math.floor((S.year-1953)/5);
+const hrAvail=()=>S.hrUsed!==curPeriod()&&!S.gameOver;
+function hrCands(){ const p=curPeriod(); if(!S.hrC||S.hrC.p!==p){ const ex=new Set([...serving(),...(S.retired||[])]); const pool=S.pool.filter(x=>!ex.has(x.n)).map(x=>x.n); for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; } S.hrC={p,list:pool.slice(0,5)}; }
+ return S.hrC.list.filter(n=>!serving().includes(n)).map(n=>S.pool[n]); }
+function appoint(r,n){ if(!hrAvail()) return; const old=S.officers[r]; S.retired=S.retired||[]; S.retired.push(old.n); S.officers[r]={...prof(n),since:S.year}; S.hrUsed=curPeriod(); S.trust=clamp(S.trust-2,0,100); addLog(S.year,'logHR',r,old.n,n,S.pool[n].trait); render(); save(); }
 const DIFF={easy:{drift:0,drought:0.7,central:1.2,quota:0.18,evt:0.35},normal:{drift:-1,drought:1,central:1,quota:0.2,evt:0.5},hard:{drift:-2,drought:1.35,central:0.85,quota:0.23,evt:0.6}};
 const S0=()=>({
  year:1953, diff:'normal', res:{steel:0,cem:0}, in:{steel:0,cem:0}, carry:{steel:0,cem:0}, trust:60, inflated:0, invest:{}, move:{N:0,S:0,E:0},
@@ -1219,11 +1267,11 @@ const planName=y=>T('pn')[y]||'';
 function laborTotal(){ return pop()*0.42; }
 function laborKept(){ return SECTORS.reduce((a,s)=>a+lv(s.id)*s.keep,0); }
 function laborFree(){ return laborTotal()-laborKept(); }
-function used(){ const a=Object.entries(S.invest).reduce((a,[k,v])=>{const [id,r]=k.split(':'); const c=sec(id).cost; const lm=(r!=='G'&&tr(r,'slow'))?1.2:1; a.steel+=v*c[0];a.cem+=v*c[1];a.labor+=v*c[2]*lm;return a;},{steel:0,cem:0,labor:0});
+function used(){ const a=Object.entries(S.invest).reduce((a,[k,v])=>{const [id,r]=k.split(':'); const c=sec(id).cost; const lm=(r!=='G'&&tr(r,'bureau'))?1.3:1; a.steel+=v*c[0];a.cem+=v*c[1];a.labor+=v*c[2]*lm;return a;},{steel:0,cem:0,labor:0});
  PROJECTS.forEach(p=>{ if(S.projOn[p.id]){ a.steel+=p.cost[0]; a.cem+=p.cost[1]; a.labor+=p.cost[2]; } }); return a; }
 function centralIn(){ const k=(0.75+S.taskHit*0.45)*D().central; return {steel:r1((4+S.trust*0.06)*k), cem:r1((4+S.trust*0.045)*k)}; }
-function waterFactor(r){ const g=REG[r]; return clamp(g.water+lv('irr',r)*(tr(r,'water')?0.108:0.09)-(lv('farm',r)+lv('cot',r))*g.demand,0.4,1.25); }
-function moveCap(){ return 12+lv('rail')*7+(S.flags.srail?15:0); }
+function waterFactor(r){ const g=REG[r]; return clamp(g.water+lv('irr',r)*(tr(r,'water')?0.09*(1+0.2*mf(r)):0.09)-(lv('farm',r)+lv('cot',r))*g.demand,0.4,1.25); }
+function moveCap(){ return 12+lv('rail')*7+(S.flags.srail?15:0)+R.filter(r=>tr(r,'logi')).length*4; }
 function outCap(){ return 22+lv('rail')*24+(S.flags.pipe?20:0); }
 function laborFactor(){ return clamp(laborTotal()/Math.max(1,laborKept()),0.6,1); }
 function coalDemand(){ return lv('steel')*1.2+lv('cem')*0.8+lv('tex')*0.4+lv('oil')*0.3+pop()*0.006; }
@@ -1232,12 +1280,13 @@ function coalFactor(){ return clamp(coalSupply()/Math.max(0.1,coalDemand()),0.5,
 function techDemand(){ return (lv('oil')+lv('steel')+lv('cem')+lv('tex')+lv('coal'))*0.35; }
 function techFactor(){ return clamp(0.75+0.3*S.tech/Math.max(0.1,techDemand()),0.75,1.08); }
 function mechFactor(){ return 1+0.25*clamp(S.mach/Math.max(1,lv('farm')*3),0,1); }
-function keepOf(r){ return r==='E'?0.98:(S.flags.road?0.97:0.94); }
+function keepOf(r){ return tr(r,'logi')?0.99:r==='E'?0.98:(S.flags.road?0.97:0.94); }
+const outLoss=r=>tr(r,'parochial')?1.12:1;
 function produceRegion(r,weather){
  const g=REG[r], w=waterFactor(r), m=S.mods.prod*laborFactor();
- if(tr(r,'slow')&&weather<0.8) weather=1-(1-weather)*0.7;
+ if(tr(r,'slow')&&weather<0.8) weather=1-(1-weather)*(1-0.3*mf(r));
  const morale=0.85+0.15*clamp(g.welfare/50,0,1);
- const grain=(g.base+lv('farm',r)*11)*w*weather*m*morale*mechFactor()*(tr(r,'grain')?1.06:1)*(S.flags.tarim&&r==='S'&&S.year===1961?0.85:1);
+ const grain=(g.base+lv('farm',r)*11)*w*weather*m*morale*mechFactor()*(tr(r,'grain')?1+0.05*mf(r):1)*(S.flags.tarim&&r==='S'&&S.year===1961?0.85:1);
  const meat=lv('herd',r)*1.2*m*(S.tmp.snowN&&r==='N'?0.6:1)*(weather<0.8?0.85:1);
  const cotton=(1+lv('cot',r)*3.2)*g.cotMul*w*(weather>0.8?1:0.7)*m*(S.tmp.cotS&&r==='S'?0.8:1);
  return {grain,cotton,w,meat};
@@ -1278,7 +1327,7 @@ function execute(){
  Object.entries(S.invest).forEach(([k,v])=>{ if(v>0){ const [id,r]=k.split(':'); const s=sec(id); if(s.reg) s.lvl[r]+=v; else s.lvl+=v; }});
  S.carry={steel:r1(Math.min(10,(S.res.steel-u.steel)*0.5)), cem:r1(Math.min(15,(S.res.cem-u.cem)*0.5))};
  PROJECTS.forEach(p=>{ if(S.projOn[p.id]){ S.proj[p.id]=(S.proj[p.id]||0)+1; if(S.proj[p.id]>=p.years&&!S.flags['done_'+p.id]){ S.flags['done_'+p.id]=1; p.apply(); S.trust=clamp(S.trust+4,0,100); log.push({k:'logProjDone',a:[p.id]}); } } }); S.projOn={};
- R.forEach(r=>{ const mv_=S.move[r]; REG[r].stock+= mv_>0? mv_*keepOf(r) : mv_; });
+ R.forEach(r=>{ const mv_=S.move[r]; REG[r].stock=Math.max(0,REG[r].stock+(mv_>0? mv_*keepOf(r) : mv_*outLoss(r))); });
  const G=produceGlobal(); let gTot=0,cTot=0,mTot=0; const wx=[]; const out={};
  R.forEach(r=>{ const g=REG[r], roll=Math.random(), dr=g.drought*D().drought; let weather=1,wt='';
   if(roll<dr){weather=0.72;wt='drought';} else if(roll<dr+0.1){weather=0.86;wt='frost';} else if(roll<dr+0.16){weather=0.88;wt='locust';} else if(roll>0.88){weather=1.08;wt='good';}
@@ -1286,7 +1335,7 @@ function execute(){
   let karez=0; if(r==='E'&&weather<1&&wt!=='locust'){ weather=1-(1-weather)*0.5; karez=1; }
   const p=produceRegion(r,weather); out[r]=p; gTot+=p.grain; cTot+=p.cotton; mTot+=p.meat; if(wt) wx.push({r,w:wt,k:karez}); });
  const meatPC=mTot*1000/pop();
- S.mach=r1(S.mach*0.94+lv('steel')*0.6*G.tf*G.cf); S.tech=r1(S.tech*0.97+lv('edu')*0.25);
+ S.mach=r1(S.mach*0.94+lv('steel')*0.6*G.tf*G.cf); S.tech=r1(S.tech*0.97+lv('edu')*0.25+R.reduce((a,r)=>a+(tr(r,'tech')?0.3*mf(r):0),0));
  const repMul=S.report==='honest'?1:S.report==='mild'?1.15:1.4;
  const boast=R.reduce((a,r)=>a+(tr(r,'boast')?out[r].grain*0.1:0),0);
  const reported=gTot*repMul+boast; if(reported>gTot+0.01){ S.inflated+=reported-gTot; S.everInflated=true; }
@@ -1298,7 +1347,7 @@ function execute(){
   if(avail<need){ got=S.ration*Math.max(0.5,avail/need); avail=0; sh.push({r,p:r0(got/S.ration*100)}); } else avail-=need;
   const capS=Math.max(20,g.pop*NEED); if(avail>capS) overflow+=avail-capS; g.stock=clamp(avail,0,capS); g.ration=got; worst=Math.min(worst,got);
   const crowd=clamp(g.pop/(g.cap0+lv('hous',r)*45),0,2); const food=got>=1?42+(got-1)*40:42*Math.pow(clamp((got-0.5)/0.5,0,1),1.3), fs=clamp(got,0.6,1), fruitBonus=r==='E'?clamp(fruitOut()*0.3*1000/g.pop/25,0,1)*7:0;
-  const tgt=16+fruitBonus+(tr(r,'welfare')?4:0)+food+fs*(9*clamp(clothPC/1,0,1)+6*clamp(meatPC/8,0,1)+Math.min(lv('hous',r),6)*1.8+Math.min(lv('edu',r),6)*2)-8*Math.max(0,crowd-1)-S.mods.unrest-(g.tmpWelfare||0);
+  const tgt=16+fruitBonus+(tr(r,'welfare')?3*mf(r):0)-(tr(r,'harsh')?5:0)+food+fs*(9*clamp(clothPC/1,0,1)+6*clamp(meatPC/8,0,1)+Math.min(lv('hous',r),6)*1.8+Math.min(lv('edu',r),6)*2)-8*Math.max(0,crowd-1)-S.mods.unrest-(g.tmpWelfare||0);
   g.tmpWelfare=0;
   g.welfare=clamp(g.welfare+(tgt-g.welfare)*0.35,0,100);
   g.hist.push({year:S.year,grain:p.grain,cotton:p.cotton,w:p.w,welfare:g.welfare});
@@ -1316,6 +1365,7 @@ function execute(){
  S.trust=clamp(S.trust+dT,0,100);
  R.forEach(r=>{ const g=REG[r]; const mig=g.pop*0.003+Math.min(lv('hous',r),8)*1.2+(g.welfare>55?g.pop*0.002:0)+(S.flags.bingtuan&&r==='N'?4:S.flags.bingtuan&&r==='S'?1.2:0);
   g.pop=r1(g.pop*(g.ration<0.7?0.99:g.ration<0.85?1.004:1.017)+(g.ration<0.85?mig*0.3:mig)); });
+ R.forEach(r=>{ if(tr(r,'ill')&&Math.random()<0.1){ const old=S.officers[r]; S.retired=S.retired||[]; S.retired.push(old.n); const o=newOfficer(serving()); S.officers[r]=o; log.push({k:'logIll',a:[r,old.n,o.n]}); } });
  const welfare=R.reduce((a,r)=>a+REG[r].welfare*REG[r].pop,0)/pop();
  S.hist.push({year:S.year,grain:gTot,cotton:cTot,oil:G.oil,steel:G.steel,cloth,welfare,trust:S.trust,pop:pop()});
  S.last={oil:G.oil,cotton:cTot,steel:G.steel,cloth,cem:G.cem,meat:mTot,coalS:G.coalS,coalD:G.coalD};
@@ -1375,12 +1425,11 @@ function checkMedals(){ MEDALS.forEach(m=>{ if(!S.medals[m.id]&&m.test()){ S.med
 function showPlanChoice(){ openView(()=>{
  const b=totalBase(), g5=b.grain*5, c5=b.cotton*5, o5=(sec('oil').lock&&S.year<sec('oil').lock?3:b.oil)*5, y=S.year;
  const mk=(mode,mul)=>`<button class="choice" data-mode="${mode}"><b>${T('mode')[mode]}</b>${T('planLine',g5*mul,c5*mul,o5*mul)}<br><small>${T('modeD')[mode]}</small></button>`;
- const hrBtn=r=>{ const o=S.officers[r]; return `<button class="choice" data-hr="${r}"${S.tmp.hrR===r?' style="opacity:.7"':''}><b>${rn(r)} · ${on(o.n)}</b><small>${tx(TRAITS[o.trait].name)}: ${tx(TRAITS[o.trait].d)}${S.tmp.hrR===r?' '+T('hrDone'):''}</small></button>`; };
  return {html:`<h3>${T('planTitle',planName(y))}</h3><div class="yr">${T('span',y,y+4)}</div>
  <p>${T('planIntro')}</p>
  <div class="plan">${mk('steady',1.0)}${mk('active',1.15)}${mk('leap',1.3)}</div>
- <p class="hint" style="margin-top:12px">${T('hrHead')}</p><div class="plan" id="hr">${R.map(hrBtn).join('')}</div>`,
- h:e=>{ const hr=e.target.closest('[data-hr]'); if(hr){ if(S.tmp.hrDone) return false; const r=hr.dataset.hr; const old=S.officers[r]; const o=newOfficer(R.map(x=>S.officers[x].n)); S.officers[r]=o; S.tmp.hrDone=1; S.tmp.hrR=r; S.trust=clamp(S.trust-2,0,100); addLog(S.year,'logHR',r,old.n,o.n,o.trait); render(); refreshView(); return false; }
+ <div class="hrsum">${R.map(r=>offLine(r)).join('')}</div><button class="tool hrgo" data-hrgo="1">${T('hrOpen')}${hrAvail()?' · '+T('hrCanOne'):''}</button>`,
+ h:e=>{ if(e.target.closest('[data-hrgo]')){ showRoster(()=>showPlanChoice()); return false; }
   const mode=e.target.closest('.choice')?.dataset.mode; if(!mode) return false;
   const mul={steady:1.0,active:1.15,leap:1.3}[mode];
   S.planBase={mode,y,targets:{grain:g5*mul,cotton:c5*mul,oil:o5*mul}};
@@ -1409,8 +1458,8 @@ const EVENTS=[
 ];
 // 随机事件池：每年无既定事件时按概率抽一件，每件只出现一次
 const RANDOM=[
- {id:'officer',when:()=>S.year>=1957,fx:[()=>{const r=pick(R);S.res.cem=Math.max(0,S.res.cem-3);REG[r].welfare=clamp(REG[r].welfare+5,0,100);addLog(S.year,'logCemTo',r);},()=>{const r=pick(R);S.officers[r].trait='boast';addLog(S.year,'logBoast',r,S.officers[r].n);}]},
- {id:'inspect',when:()=>R.some(r=>tr(r,'boast')),fx:[()=>{const r=R.find(x=>tr(x,'boast'));const o=newOfficer(R.map(x=>S.officers[x].n));S.officers[r]=o;S.inflated=r1(S.inflated*0.5);S.trust-=3;addLog(S.year,'logReplace',r,o.n);},()=>{}]},
+ {id:'officer',when:()=>S.year>=1957,fx:[()=>{const r=pick(R);S.res.cem=Math.max(0,S.res.cem-3);REG[r].welfare=clamp(REG[r].welfare+5,0,100);addLog(S.year,'logCemTo',r);},()=>{const r=pick(R);S.officers[r].flaw='boast';if(S.pool)S.pool[S.officers[r].n].flaw='boast';addLog(S.year,'logBoast',r,S.officers[r].n);}]},
+ {id:'inspect',when:()=>R.some(r=>tr(r,'boast')),fx:[()=>{const r=R.find(x=>tr(x,'boast'));S.retired=S.retired||[];S.retired.push(S.officers[r].n);const o=newOfficer(serving());S.officers[r]=o;S.inflated=r1(S.inflated*0.5);S.trust-=3;addLog(S.year,'logReplace',r,o.n);},()=>{}]},
  {id:'power',when:()=>coalFactor()<0.95,fx:[()=>{REG.N.tmpWelfare=6;},()=>{S.mods.prod*=0.9;S.mods.until.prod=S.year;}]},
  {id:'tractor',when:()=>S.year>=1959,fx:[()=>{S.mach+=6;}]},
  {id:'breed',when:()=>lv('herd','N')>=3,fx:[()=>{S.flags.wool=1;}]},
@@ -1479,7 +1528,7 @@ function epilogue(){
  R.forEach(r=>{ const g=REG[r], w=g.welfare, wf=waterFactor(r), o=S.officers[r];
   let t=w>=70?T('ep70'):w>=50?T('ep50'):w>=30?T('ep30'):T('ep0');
   t+=' '+(wf>=1?T('epW1'):wf>=0.8?T('epW8'):T('epW0'));
-  if(o) t+=' '+(o.trait==='boast'?T('epBoast',o.n):o.trait==='welfare'?T('epWel',o.n):T('epStay',o.n));
+  if(o) t+=' '+(o.flaw==='boast'?T('epBoast',o.n):o.trait==='welfare'?T('epWel',o.n):T('epStay',o.n));
   lines.push(T('epReg',rn(r),t)); });
  const done=PROJECTS.filter(p=>S.flags['done_'+p.id]).map(p=>tx(p.name));
  lines.push(T('epReg',T('epAll'),(done.length?T('epDone',done.join(T('listJoin'))):T('epNone'))+' '+(S.everInflated?T('epInfl'):T('epClean'))));
@@ -1531,7 +1580,7 @@ function endGame(reason){
 }
 
 // ================= 存档 =================
-const KEY='tianshan-plan-v12';
+const KEY='tianshan-plan-v13';
 function save(){ try{ if(S.log.length>300) S.log.length=300; localStorage.setItem(KEY,JSON.stringify({S,REG,lvl:SECTORS.map(s=>({lvl:s.lvl,lock:s.lock}))})); }catch(e){} }
 function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(!d||d.S.gameOver) return false; S=d.S; REG=d.REG; SECTORS.forEach((s,i)=>{s.lvl=d.lvl[i].lvl; s.lock=d.lvl[i].lock;}); return true; }catch(e){ return false; } }
 function clearSave(){ try{ localStorage.removeItem(KEY); }catch(e){} }
@@ -1572,10 +1621,10 @@ function render(){
  $('balHint').textContent=F.lf<1?T('balLab',r0(F.lf*100)):F.cf<1?T('balCoal',r0(F.cf*100)):T('balOk');
  document.querySelectorAll('#rationSeg button').forEach(b=>b.classList.toggle('on',+b.dataset.v===S.ration));
  const clothPC=S.last.cloth*0.15*1000/P; $('clothNote').textContent=T('clothNote',nf(clothPC),clothPC<1);
- $('regions').innerHTML=`<tr><th>${T('thRegion')}</th><th>${T('thOfficer')}</th><th>${T('tPop')}</th><th>${T('thHous')}</th><th>${T('thNeed')}</th><th>${T('thStock')}</th><th>${T('thGrain')}</th><th>${T('thIrr')}</th><th>${T('thWel')}</th><th>${T('thMove')}</th></tr>`+R.map(r=>{ const g=REG[r], p0=produceRegion(r,1), p=F.reg[r].p, nd=g.pop*NEED*S.ration, after=g.stock+(S.move[r]>0?S.move[r]*keepOf(r):S.move[r]);
+ $('regions').innerHTML=`<tr><th>${T('thRegion')}</th><th>${T('thOfficer')}</th><th>${T('tPop')}</th><th>${T('thHous')}</th><th>${T('thNeed')}</th><th>${T('thStock')}</th><th>${T('thGrain')}</th><th>${T('thIrr')}</th><th>${T('thWel')}</th><th>${T('thMove')}</th></tr>`+R.map(r=>{ const g=REG[r], p0=produceRegion(r,1), p=F.reg[r].p, nd=g.pop*NEED*S.ration, after=g.stock+(S.move[r]>0?S.move[r]*keepOf(r):S.move[r]*outLoss(r));
   const cover=(after+p.grain*0.8)/nd, pc=cover<1?'bad':cover<1.15?'warn':'good', wc=g.welfare<30?'bad':g.welfare<50?'warn':'good';
   const o=S.officers?S.officers[r]:null; const cr=F.reg[r].cr; const arrow=(a,b,f)=>f(a)!==f(b)?`<span class="was">${f(a)} → </span><b class="${b>a?'up':'dn'}">${f(b)}</b>`:f(b);
-  return `<tr><td class="sec rname">${rn(r)}<small class="rsub">${tx(REGSUB[r])}</small></td><td class="sec roff" style="font-weight:500">${o?on(o.n):''}<small>${o?tx(TRAITS[o.trait].name):''}<span class="td"> · ${o?tx(TRAITS[o.trait].d):''}</span></small></td><td class="n" data-l="${T('tPop')}">${pp(g.pop)}</td><td class="n" data-l="${T('thHous')}">${cr>1?'<span class="tag red">'+T('crowded',r0(cr*100))+'</span>':r0(cr*100)+'%'}</td><td class="n" data-l="${T('thNeed')}">${ms(nd,0)}</td><td class="n" data-l="${T('thStock')}"><span class="pill ${pc}"></span>${mv(g.stock)}${S.move[r]?' → '+mv(after):''}</td><td class="n" data-l="${T('thGrain')}">${arrow(p0.grain,p.grain,v=>mv(v,0))}</td><td class="n" data-l="${T('thIrr')}">${arrow(p0.w*100,p.w*100,v=>r0(v)+'%')}</td><td class="n" data-l="${T('thWel')}"><span class="pill ${wc}"></span>${r0(g.welfare)}</td>
+  return `<tr><td class="sec rname">${rn(r)}<small class="rsub">${tx(REGSUB[r])}</small></td><td class="sec roff" style="font-weight:500">${o?on(o.n):''}<small>${o?chipM(o.trait)+chipF(o.flaw):''}</small></td><td class="n" data-l="${T('tPop')}">${pp(g.pop)}</td><td class="n" data-l="${T('thHous')}">${cr>1?'<span class="tag red">'+T('crowded',r0(cr*100))+'</span>':r0(cr*100)+'%'}</td><td class="n" data-l="${T('thNeed')}">${ms(nd,0)}</td><td class="n" data-l="${T('thStock')}"><span class="pill ${pc}"></span>${mv(g.stock)}${S.move[r]?' → '+mv(after):''}</td><td class="n" data-l="${T('thGrain')}">${arrow(p0.grain,p.grain,v=>mv(v,0))}</td><td class="n" data-l="${T('thIrr')}">${arrow(p0.w*100,p.w*100,v=>r0(v)+'%')}</td><td class="n" data-l="${T('thWel')}"><span class="pill ${wc}"></span>${r0(g.welfare)}</td>
   <td class="c rmove" data-l="${T('thMove')}"><span class="ctl move"><button data-r="${r}" data-d="-1" aria-label="${T('ariaOut',rn(r))}">−</button><span class="${S.move[r]>0?'pos':S.move[r]<0?'neg':''}">${sg(S.move[r])}${mv(S.move[r],0)}</span><button data-r="${r}" data-d="1" aria-label="${T('ariaIn',rn(r))}">+</button></span></td></tr>`;}).join('');
  const msum=moveSum(); $('moveHint').textContent=msum!==0?T('moveUnbal',sg(msum)+ms(msum,0)):T('moveOk',ms(moveOut(),0),ms(moveCap(),0));
  let rows=`<tr><th>${T('thSector')}</th><th>${T('rs','N')}</th><th>${T('rs','S')}</th><th>${T('rs','E')}</th><th class="costh">${T('thCost')}</th></tr><tr class="grp"><td colspan="5">${T('grpReg')}</td></tr>`;
@@ -1608,7 +1657,7 @@ function renderDock(u,lf,msum){
 // 本年要点 · priorities
 function advice(){ const ll=laborFree()-used().labor; return withPlan(()=>advice0(ll)); }
 function advice0(ll){ const out=[]; const add=(lvl,k,...a)=>out.push({lvl,k,a});
- R.forEach(r=>{ const g=REG[r], p=produceRegion(r,1), nd=g.pop*NEED*S.ration, after=g.stock+(S.move[r]>0?S.move[r]*keepOf(r):S.move[r]); const bal=after+p.grain*0.8-nd;
+ R.forEach(r=>{ const g=REG[r], p=produceRegion(r,1), nd=g.pop*NEED*S.ration, after=g.stock+(S.move[r]>0?S.move[r]*keepOf(r):S.move[r]*outLoss(r)); const bal=after+p.grain*0.8-nd;
   if(bal<0) add(2,'advShort',r,ms(-bal,0)); else if(bal<nd*0.12) add(1,'advTight',r);
   if(g.welfare<25) add(2,'advWel',r);
   const cr=g.pop/(g.cap0+lv('hous',r)*45); if(cr>1.05) add(1,'advCrowd',r,r0(cr*100));
@@ -1621,6 +1670,7 @@ function advice0(ll){ const out=[]; const add=(lvl,k,...a)=>out.push({lvl,k,a});
  if(S.task.oil>0&&so<S.task.oil*0.95) add(1,'advTask','oil'); if(S.task.cotton>0&&sc<S.task.cotton*0.95) add(1,'advTask','cotton');
  if(S.planBase){ const yi=(S.year-1953)%5; if(yi>=2){ const t=S.planBase.targets, done={grain:0,cotton:0,oil:0}; S.hist.filter(x=>x.year>=S.year-yi).forEach(x=>{done.grain+=x.grain;done.cotton+=x.cotton;done.oil+=x.oil;});
   for(const k of ['grain','cotton','oil']){ const pace=k==='oil'?G.oil:b[k]; if(t[k]*0.97-done[k]>pace*(5-yi)*1.02) add(1,'advPlan',k,mv(done[k],0),ms(t[k],0)); } } }
+ if(hrAvail()){ const bad=R.find(r=>['boast','harsh','bureau','parochial'].includes(S.officers[r].flaw)); if(bad) add(1,'advHR',bad,S.officers[bad].n,S.officers[bad].flaw); }
  if(S.inflated>0) add(1,'advAudit',ms(S.inflated,0),r0(Math.min(0.45,0.06+S.inflated/800)*100));
  out.sort((a,b)=>b.lvl-a.lvl); return out.slice(0,5); }
 // 画面无变化时不重绘 · redraw art only when something visible changed
@@ -1638,7 +1688,7 @@ function autoMove(){ S.move={N:0,S:0,E:0}; const need=r=>REG[r].pop*NEED*S.ratio
 function repeatInv(){ const li=S.lastInvest||{}, lp=S.lastProj||{}; if(!Object.keys(li).length&&!Object.keys(lp).length){ toast('tRepeatNone'); return; }
  S.invest={}; S.projOn={}; let partial=false; const fits=(c,lm)=>{ const u=used(); return u.steel+c[0]<=S.res.steel+1e-9&&u.cem+c[1]<=S.res.cem+1e-9&&u.labor+c[2]*(lm||1)<=laborFree()+1e-9; };
  for(const pid of Object.keys(lp)){ const p=PROJECTS.find(x=>x.id===pid); if(!p||S.flags['done_'+pid]||S.year<p.from) continue; if(fits(p.cost)) S.projOn[pid]=1; else partial=true; }
- for(const [k,v] of Object.entries(li)){ const [id,r]=k.split(':'), s=sec(id); if(s.lock&&S.year<s.lock) continue; const lm=(r!=='G'&&tr(r,'slow'))?1.2:1; for(let i=0;i<v;i++){ if(fits(s.cost,lm)) S.invest[k]=(S.invest[k]||0)+1; else { partial=true; break; } } }
+ for(const [k,v] of Object.entries(li)){ const [id,r]=k.split(':'), s=sec(id); if(s.lock&&S.year<s.lock) continue; const lm=(r!=='G'&&tr(r,'bureau'))?1.3:1; for(let i=0;i<v;i++){ if(fits(s.cost,lm)) S.invest[k]=(S.invest[k]||0)+1; else { partial=true; break; } } }
  render(); if(partial) toast('tRepeatPart'); }
 // ---------- 手机：抬头、标签、分区 · phone shell ----------
 let PANE=(()=>{ try{ return sessionStorage.getItem('ts-pane')||'ov'; }catch(e){ return 'ov'; } })(), BSUB='reg', mapOpen=false, logSeen=0;
@@ -1660,9 +1710,30 @@ function renderMobile(adv,P,stock,welfare,u){
  set('ov',lv2?'r':'',''); set('grain',gShort?'r':gTight?'a':'',''); set('build',(!Object.keys(S.invest).length&&!Object.keys(S.projOn).length&&!S.gameOver)?'a':'','');
  const nl=Math.max(0,S.log.length-logSeen); set('log',PANE!=='log'&&nl?'n':'',PANE!=='log'&&nl?String(Math.min(nl,9)):'');
  if(PANE==='log') logSeen=S.log.length;
+ const hb=$('hrBtn'); if(hb){ hb.textContent=T('hrBtn')+(hrAvail()?' ●':''); hb.classList.toggle('hot',hrAvail()); }
  const mt=$('mapToggle'); if(mt){ mt.textContent=mapOpen?T('mapHide'):T('mapShow'); mt.setAttribute('aria-expanded',mapOpen); }
  document.body.classList.toggle('mapOpen',mapOpen);
 }
+// ---------- 官员名单 · roster ----------
+const chipM=t=>`<span class="tg m" title="${tx(TRAITS[t].d)}">${tx(TRAITS[t].name)}</span>`;
+const chipF=f=>`<span class="tg ${f==='clean'?'c':'f'}" title="${tx(FLAWS[f].d)}">${tx(FLAWS[f].name)}</span>`;
+function offLine(r){ const o=S.officers[r]; return `<div class="hrl"><b>${rn(r)}</b> ${on(o.n)} ${chipM(o.trait)}${chipF(o.flaw)}</div>`; }
+let hrTarget=null;
+function showRoster(after){ if(!hrTarget) hrTarget=R.slice().sort((a,b)=>REG[a].welfare-REG[b].welfare)[0];
+ openView(()=>{ const av=hrAvail(), cands=hrCands();
+  const card=(o,r)=>{ const p=S.pool[o.n]||o; return `<div class="off${r?' cur':''}"><div class="offh"><b>${on(o.n)}</b><span>${r?rn(r)+' · ':''}${tx(BGS[p.bg])} · ${T('hrAge',S.year-p.born)}${r?' · '+T('hrTen',Math.max(0,S.year-(o.since||S.year))):''}</span></div>
+   <div class="offt">${chipM(o.trait)} <small>${tx(TRAITS[o.trait].d)}</small></div><div class="offt">${chipF(o.flaw)} <small>${tx(FLAWS[o.flaw].d)}</small></div>
+   ${r?`<div class="offw">${T('thWel')} ${r0(REG[r].welfare)}</div>`:(av?`<button class="tool" data-ap="${o.n}">${T('hrAppoint',rn(hrTarget))}</button>`:'')}</div>`; };
+  return {html:`<h3>${T('hrTitle')}</h3><div class="yr">${av?T('hrRuleOn',planName(curPeriod())):T('hrRuleOff')}</div>
+  <h4 class="hrh">${T('hrCur')}</h4>${R.map(r=>card(S.officers[r],r)).join('')}
+  <h4 class="hrh">${T('hrCands')}</h4>${av?`<div class="hrtg"><span>${T('hrTo')}</span><span class="seg">${R.map(r=>`<button data-tg="${r}" class="${r===hrTarget?'on':''}">${rn(r)}</button>`).join('')}</span></div>`:''}
+  ${cands.length?cands.map(o=>card(o,null)).join(''):`<p class="hint">${T('hrNone')}</p>`}
+  <button class="btn alt sm" data-hrx="1">${T('hbOk')}</button>`,
+  esc:()=>{ closeCard(); if(after) after(); },
+  h:e=>{ const tg=e.target.closest('[data-tg]'); if(tg){ hrTarget=tg.dataset.tg; refreshView(); return false; }
+   const ap=e.target.closest('[data-ap]'); if(ap){ appoint(hrTarget,+ap.dataset.ap); toast('tHR',hrTarget); refreshView(); return false; }
+   if(e.target.closest('[data-hrx]')){ closeCard(); if(after) after(); return 'closed'; } return false; }};
+ }); }
 function showMenu(){ openView(()=>({html:`<h3>${T('menuTitle')}</h3><div class="yr">${T('diffTag',T('diffName')[S.diff])}</div>
  <button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
  esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
@@ -1691,7 +1762,7 @@ function pulse(){ const s=$('stamp'); s.classList.add('pop'); setTimeout(()=>s.c
 $('sectors').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
  const k=b.dataset.k, d=+b.dataset.d, s=sec(k.split(':')[0]);
  const nv=(S.invest[k]||0)+d; if(nv<0) return;
- if(d>0){ const u=used(); if(u.steel+s.cost[0]>S.res.steel+1e-9){toast('tNoSteel',s.id);return;} if(u.cem+s.cost[1]>S.res.cem+1e-9){toast('tNoCem',s.id);return;} if(u.labor+s.cost[2]*((k.split(':')[1]!=='G'&&tr(k.split(':')[1],'slow'))?1.2:1)>laborFree()+1e-9){toast('tNoLab',s.id);return;} }
+ if(d>0){ const u=used(); if(u.steel+s.cost[0]>S.res.steel+1e-9){toast('tNoSteel',s.id);return;} if(u.cem+s.cost[1]>S.res.cem+1e-9){toast('tNoCem',s.id);return;} if(u.labor+s.cost[2]*((k.split(':')[1]!=='G'&&tr(k.split(':')[1],'bureau'))?1.3:1)>laborFree()+1e-9){toast('tNoLab',s.id);return;} }
  S.invest[k]=nv; render(); });
 $('regions').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
  const r=b.dataset.r, d=+b.dataset.d*4, g=REG[r], nv=S.move[r]+d;
@@ -1708,6 +1779,7 @@ $('go').addEventListener('click',execute);
 $('tabbar').addEventListener('click',e=>{ const b=e.target.closest('button[data-p]'); if(b) setPane(b.dataset.p); });
 $('subseg').addEventListener('click',e=>{ const b=e.target.closest('button[data-sub]'); if(b) setSub(b.dataset.sub); });
 $('mmenu').addEventListener('click',showMenu);
+$('hrBtn').addEventListener('click',()=>showRoster());
 $('mapToggle').addEventListener('click',()=>{ mapOpen=!mapOpen; mapKey=''; render(); });
 $('stats').addEventListener('click',e=>{ const t=e.target.closest('.tile'); if(t&&isPhone()){ const el=$('toast'); el.innerHTML=`<b>${t.dataset.k}</b>：${t.dataset.d}`; el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),3200); } });
 $('autoMove').addEventListener('click',autoMove); $('clearMove').addEventListener('click',()=>{ S.move={N:0,S:0,E:0}; render(); });
