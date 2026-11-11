@@ -325,7 +325,7 @@ html:not([lang^="zh"]) .log p{padding-left:0;text-indent:0}
   <h1><span data-t="title"></span><small data-t="sub"></small></h1>
   <div class="stamp" id="stamp"><b id="year">1953</b><span id="planName"></span></div>
 </header>
-<div class="topbar"><span class="lang" id="langbar"><button data-lang="zh" lang="zh">中文</button><button data-lang="en" lang="en">EN</button><button data-lang="pt" lang="pt">PT</button></span><span class="hint" id="diffTag"></span><button class="link" id="codexBtn" data-t="codex"></button><button class="link" id="help" data-t="help"></button><button class="link" id="dbgBtn" data-t="dbg"></button><button class="link" id="restart" data-t="restart"></button></div>
+<div class="topbar"><span class="lang" id="langbar"><button data-lang="zh" lang="zh">中文</button><button data-lang="en" lang="en">EN</button><button data-lang="pt" lang="pt">PT</button></span><span class="hint" id="diffTag"></span><button class="link" id="shotBtn" data-t="shot"></button><button class="link" id="codexBtn" data-t="codex"></button><button class="link" id="help" data-t="help"></button><button class="link" id="dbgBtn" data-t="dbg"></button><button class="link" id="restart" data-t="restart"></button></div>
 
 <main id="main">
 <section class="pane" data-pane="ov" id="pane-ov">
@@ -389,6 +389,7 @@ html:not([lang^="zh"]) .log p{padding-left:0;text-indent:0}
 const STR={};
 STR.zh={
  title:`天山五年计划`, sub:`自治区计划委员会 · 物资平衡与年度计划执行簿`, help:`工作手册`, restart:`重新开始`,
+ shot:`📷 留念`, shotTitle:`留念截图`, shotSub:`生成一张本局纪念图，可保存或分享`, shotSave:`保存图片`, shotShare:`分享`, shotHint:`手机上也可以长按图片保存到相册。`, shotHead:`计划执行留念`, shotYear:y=>`${y} 年`, shotGrain:`粮食产量`, shotOil:`原油`, shotMedals:`所获荣誉`, shotNoMedal:`尚未获得荣誉`, shotScore:`总评`, shotCheat:`调试模式·不计正式成绩`, shotPlay:`来玩：`, shotFail:`生成图片失败，请用系统截屏。`, shotSaved:`图片已保存`,
  hOverview:`全区概况`, hBal:`本年物资平衡表`, hBalHint:`来源 = 中央调入 + 区内生产 + 上年结余；用途 = 本年建设`,
  hRation:`定量供应`, hRationHint:`口粮按人定量，布票按人头发放；压低定量可多留储备，但民生下降`, labRation:`口粮定量`, labCloth:`布票`,
  r087:`紧缩 200 公斤`, r100:`标准 230 公斤`, r113:`宽裕 260 公斤`,
@@ -532,6 +533,7 @@ STR.zh={
 
 STR.en={
  title:`Tianshan Five-Year Plan`, sub:`Regional Planning Commission · Material balances and annual plan ledger`, help:`Handbook`, restart:`Restart`,
+ shot:`📷 Keepsake`, shotTitle:`Keepsake image`, shotSub:`A commemorative picture of this game to save or share`, shotSave:`Save image`, shotShare:`Share`, shotHint:`On a phone you can also long-press the picture to save it.`, shotHead:`Plan ledger keepsake`, shotYear:y=>`Year ${y}`, shotGrain:`Grain output`, shotOil:`Crude oil`, shotMedals:`Honours earned`, shotNoMedal:`No honours yet`, shotScore:`Verdict`, shotCheat:`Debug mode · unofficial`, shotPlay:`Play: `, shotFail:`Could not make the image; please use a system screenshot.`, shotSaved:`Image saved`,
  hOverview:`Regional overview`, hBal:`This year's material balances`, hBalHint:`Sources = central allocation + regional output + carry-over; uses = this year's construction`,
  hRation:`Rationing`, hRationHint:`Grain is rationed per person and cloth coupons issued per head; lower rations leave more in reserve but hurt livelihood`, labRation:`Grain ration`, labCloth:`Cloth coupons`,
  r087:`Tight 200 kg`, r100:`Standard 230 kg`, r113:`Generous 260 kg`,
@@ -664,6 +666,7 @@ STR.en={
 
 STR.pt={
  title:`Plano Quinquenal de Tianshan`, sub:`Comissão Regional de Planeamento · Balanços materiais e livro do plano anual`, help:`Manual`, restart:`Recomeçar`,
+ shot:`📷 Recordação`, shotTitle:`Imagem de recordação`, shotSub:`Uma imagem comemorativa deste jogo para guardar ou partilhar`, shotSave:`Guardar imagem`, shotShare:`Partilhar`, shotHint:`No telemóvel também pode tocar longamente na imagem para a guardar.`, shotHead:`Recordação do plano`, shotYear:y=>`Ano ${y}`, shotGrain:`Produção de cereal`, shotOil:`Crude`, shotMedals:`Distinções obtidas`, shotNoMedal:`Ainda sem distinções`, shotScore:`Avaliação`, shotCheat:`Modo de depuração · não oficial`, shotPlay:`Jogar: `, shotFail:`Não foi possível criar a imagem; use a captura de ecrã do sistema.`, shotSaved:`Imagem guardada`,
  hOverview:`Visão geral da região`, hBal:`Balanços materiais do ano`, hBalHint:`Origens = afetação central + produção regional + transição; usos = construção deste ano`,
  hRation:`Racionamento`, hRationHint:`O cereal é racionado por pessoa e as senhas de tecido distribuídas por cabeça; rações menores deixam mais reservas mas prejudicam o bem-estar`, labRation:`Ração de cereal`, labCloth:`Senhas de tecido`,
  r087:`Apertada 200 kg`, r100:`Padrão 230 kg`, r113:`Generosa 260 kg`,
@@ -1784,8 +1787,8 @@ function endGame(reason){
  const self=clamp((last.grain||0)/(pop()*NEED),0,1.3);
  const raw=pop()*0.25+welfare*2+S.trust*1+ind*0.6+self*120-spread*0.8+(S.everInflated?-30:20)+nm*15;
  const score=r0(reason? raw*0.5 : raw*(S.diff==='hard'?1.25:S.diff==='easy'?0.85:1)*(S.scenario==='short'?0.85:1));
- const gk=reason?'removed':score>720?'top':score>600?'good':score>480?'ok':'pass';
- const span=reason?String(S.year):T('span',S.scenario==='short'?1963:1953,1977);
+ S.finalScore=score; const gk=reason?'removed':score>720?'top':score>600?'good':score>480?'ok':'pass';
+ S.finalGk=gk; const span=reason?String(S.year):T('span',S.scenario==='short'?1963:1953,1977);
  return {html:`<h3>${reason?T('eRemoved'):T('eFinal')}</h3><div class="yr">${T('eYr',span,T('diffName')[S.diff])}</div>
  <p>${reason?T(reason.k,...reason.a):T('eFinish')}</p>
  <canvas class="art" id="endBanner" width="760" height="170" role="img" aria-label="${T('endBan',S.year)}"></canvas><p class="capt">${T('endBan',Math.min(S.year,1977))}</p>
@@ -1802,10 +1805,72 @@ function endGame(reason){
  </div>
  <div class="medals">${MEDALS.map(m=>`<span class="medal ${S.medals[m.id]?'got':''}">${tx(m.name)}${S.medals[m.id]?' · '+S.medals[m.id]:''}</span>`).join('')}</div>
  <p class="hint">${T('eScore',score,r0(self*100),r0(spread),!!reason,T('diffName')[S.diff])}</p>
- <button class="btn alt" id="again">${T('eAgain')}</button>`,
- h:e=>{ if(e.target.id==='again'){ clearSave(); location.reload(); } return false; },
+ <button class="btn" id="endShot">${T('shot')}</button><button class="btn alt" id="again">${T('eAgain')}</button>`,
+ h:e=>{ if(e.target.id==='again'){ clearSave(); location.reload(); } if(e.target.id==='endShot'){ showKeepsake(); return 'closed'; } return false; },
  after:()=>{ drawBanner('endBanner'); drawCompare('cmp1','grain',T('cmpGrain'),'#2f4a5e',v=>ms(v,0)); drawCompare('cmp2','oil',T('cmpOil'),'#b7793a',v=>ms(v,0)); drawCompare('cmp3','pop',T('cmpPop'),'#3f6b3a',pp); }};
  });
+}
+
+
+// ================= 留念截图 · Keepsake image =================
+function makeKeepsake(){
+ const W=1080, H=1440, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d'); if(!x) return null;
+ const FB=getComputedStyleSafe('--font-body'), FDp=getComputedStyleSafe('--font-display');
+ // 临时离屏画布，固定宽度，借用游戏原有的绘图函数
+ const host=document.createElement('div'); host.style.cssText='position:fixed;left:-20000px;top:0;width:760px;visibility:hidden;pointer-events:none';
+ host.innerHTML='<canvas id="ksBan" style="width:760px;display:block"></canvas><canvas id="ksMap" style="width:760px;display:block"></canvas>'; document.body.appendChild(host);
+ let ban=null, map=null; try{ drawBanner('ksBan'); ban=$('ksBan'); }catch(e){} try{ drawMap('ksMap'); map=$('ksMap'); }catch(e){}
+ x.fillStyle='#efe6d2'; x.fillRect(0,0,W,H); try{ paperGrain(x,W,H,77); }catch(e){}
+ // 外框
+ x.strokeStyle=PAL.ink; x.lineWidth=3; x.strokeRect(24,24,W-48,H-48); x.lineWidth=1; x.strokeRect(34,34,W-68,H-68);
+ // 标题区
+ x.fillStyle=PAL.red; x.fillRect(34,34,W-68,128);
+ x.fillStyle='#fff'; x.textBaseline='middle'; x.textAlign='left'; x.font=`600 52px ${FDp}`; x.fillText(T('title'),70,84);
+ x.font=`24px ${FB}`; x.globalAlpha=.9; x.fillText(T('shotHead')+' · '+T('diffName')[S.diff],72,134); x.globalAlpha=1;
+ x.textAlign='right'; x.font=`600 64px ${FDp}`; x.fillText(String(Math.min(S.year,1977)),W-70,96);
+ let y=190;
+ if(ban&&ban.width){ const bh=Math.round((W-120)*170/760); x.drawImage(ban,60,y,W-120,bh); x.strokeStyle=PAL.ink; x.lineWidth=1.5; x.strokeRect(60,y,W-120,bh); y+=bh+28; }
+ if(S.gameOver){ const g=T('grade')[S.finalGk||'pass']||'', stamp=ZH()?g.replace(/ /g,''):g; x.save(); x.font=`600 ${ZH()?30:22}px ${FDp}`; const sw=Math.max(140,x.measureText(stamp).width+44);
+  x.translate(W-60-sw/2-10,y-62); x.rotate(-0.16); x.fillStyle='rgba(251,246,234,.88)'; x.fillRect(-sw/2,-34,sw,68); x.strokeStyle='rgba(168,50,42,.85)'; x.lineWidth=4; x.strokeRect(-sw/2,-34,sw,68); x.lineWidth=1.5; x.strokeRect(-sw/2+7,-27,sw-14,54);
+  x.fillStyle='rgba(168,50,42,.9)'; x.textAlign='center'; x.textBaseline='middle'; x.fillText(stamp,0,2); x.restore(); }
+ // 数据格
+ const h=S.hist||[], last=h[h.length-1]||{}; const wel=R.reduce((a,r)=>a+REG[r].welfare*REG[r].pop,0)/Math.max(1,pop());
+ const cells=[[T('tPop'),pp(pop())],[T('lgWel'),r0(wel)],[T('tTrust'),r0(S.trust)],[T('shotGrain'),ms(last.grain||0,0)],[T('shotOil'),ms(last.oil||0,0)],[T('thStock'),ms(R.reduce((a,r)=>a+REG[r].stock,0),0)]];
+ if(S.gameOver&&S.finalScore!=null) cells.push([T('shotScore'),String(S.finalScore)]);
+ const cols=cells.length>6?4:3, cw=(W-120)/cols, chh=92;
+ cells.forEach(([k,v],i)=>{ const cx=60+(i%cols)*cw, cy=y+Math.floor(i/cols)*chh; x.fillStyle='rgba(251,246,234,.85)'; x.fillRect(cx+4,cy,cw-8,chh-10); x.strokeStyle='rgba(47,74,94,.35)'; x.lineWidth=1; x.strokeRect(cx+4,cy,cw-8,chh-10);
+  x.textAlign='left'; x.fillStyle=PAL.ink2; x.font=`20px ${FB}`; x.fillText(k,cx+20,cy+24); x.fillStyle=PAL.ink; x.font=`600 34px ${FDp}`; x.fillText(v,cx+20,cy+58); });
+ y+=Math.ceil(cells.length/cols)*chh+12;
+ // 地图
+ if(map&&map.width){ const mh=Math.round((W-120)*map.height/map.width); const maxH=H-y-220; const sc_=Math.min(1,maxH/mh); const mw=(W-120)*sc_, mh2=mh*sc_; x.drawImage(map,(W-mw)/2,y,mw,mh2); y+=mh2+26; }
+ // 荣誉
+ x.textAlign='left'; x.fillStyle=PAL.ink; x.font=`600 26px ${FDp}`; x.fillText(T('shotMedals'),60,y+4); y+=40;
+ const got=MEDALS.filter(m=>S.medals[m.id]); x.font=`21px ${FB}`; let mx=60;
+ if(!got.length){ x.fillStyle=PAL.ink2; x.fillText(T('shotNoMedal'),60,y); y+=40; }
+ got.forEach(m=>{ const t=tx(m.name)+' · '+S.medals[m.id]; const tw=x.measureText(t).width+28; if(mx+tw>W-60){ mx=60; y+=44; } if(y>H-130) return;
+  x.fillStyle=PAL.och; x.beginPath(); if(x.roundRect) x.roundRect(mx,y-17,tw,34,17); else x.rect(mx,y-17,tw,34); x.fill(); x.fillStyle='#fff'; x.fillText(t,mx+14,y+1); mx+=tw+10; });
+ // 页脚
+ x.fillStyle=PAL.ink; x.fillRect(34,H-100,W-68,66); x.fillStyle='#efe6d2'; x.textAlign='left'; x.font=`22px ${FB}`;
+ x.fillText(T('shotPlay')+'jabarrick.github.io/tianshan-plan',60,H-67);
+ x.textAlign='right'; x.fillText(S.cheated?T('shotCheat'):new Date().toISOString().slice(0,10),W-60,H-67);
+ host.remove();
+ return c;
+}
+function ksBlob(c){ return new Promise(res=>{ try{ c.toBlob(b=>res(b),'image/png'); }catch(e){ res(null); } }); }
+function showKeepsake(){
+ let c=null; try{ c=makeKeepsake(); }catch(e){ c=null; } if(!c){ toast('shotFail'); return; }
+ let url=''; try{ url=c.toDataURL('image/png'); }catch(e){ toast('shotFail'); return; }
+ const fname=`tianshan-${S.year}.png`; const prev=view, back=()=>{ if(prev&&S.gameOver) openView(prev); else closeCard(); };
+ openView(()=>({html:`<h3>${T('shotTitle')}</h3><div class="yr">${T('shotSub')}</div>
+ <img src="${url}" alt="${T('shotTitle')}" style="width:100%;max-width:420px;display:block;margin:8px auto;border:1px solid var(--line,#bbb);box-shadow:0 2px 10px rgba(0,0,0,.18)">
+ <p class="hint" style="text-align:center">${T('shotHint')}</p>
+ <button class="btn" id="ksSave">${T('shotSave')}</button>${(navigator.share&&navigator.canShare)?`<button class="btn alt" id="ksShare">${T('shotShare')}</button>`:''}<button class="btn alt sm" id="ksClose">${T('hbOk')}</button>`,
+ esc:()=>back(),
+ h:e=>{ const id=e.target.id;
+  if(id==='ksSave'){ const a=document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove(); toast('shotSaved'); return false; }
+  if(id==='ksShare'){ ksBlob(c).then(b=>{ if(!b) return; const f=new File([b],fname,{type:'image/png'}); if(navigator.canShare({files:[f]})) navigator.share({files:[f],title:T('title'),text:T('shotPlay')+'https://jabarrick.github.io/tianshan-plan/'}).catch(()=>{}); else { const a=document.createElement('a'); a.href=url; a.download=fname; a.click(); } }); return false; }
+  if(id==='ksClose'){ back(); return 'closed'; }
+  return false; }}));
 }
 
 // ================= 存档 =================
@@ -2040,8 +2105,8 @@ function showDebug(){ if(!S.dbg){ openView(()=>({html:`<h3>${T('dbgTitle')}</h3>
    if(act[a]){ dbgAct(act[a],b.textContent); refreshView(); } return false; }};
  }); }
 function showMenu(){ openView(()=>({html:`<h3>${T('menuTitle')}</h3><div class="yr">${T('diffTag',T('diffName')[S.diff])}</div>
- <button class="choice" data-m="codex"><b>${T('codex')}</b></button><button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="dbg"><b>${T('dbg')}${S.dbg?' ●':''}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
- esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='codex') showCodex(); else if(k==='dbg') showDebug(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
+ <button class="choice" data-m="shot"><b>${T('shot')}</b></button><button class="choice" data-m="codex"><b>${T('codex')}</b></button><button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="dbg"><b>${T('dbg')}${S.dbg?' ●':''}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
+ esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='codex') showCodex(); else if(k==='shot') showKeepsake(); else if(k==='dbg') showDebug(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
 function renderLog(){ $('log').innerHTML=S.log.map(e=>{ let s=''; try{ s=T(e.k,...e.a); }catch(err){ s=''; } return `<p><b>${T('yp',e.y)}</b>${s}</p>`; }).join(''); }
 function addLog(y,k,...a){ S.log.unshift({y,k,a}); if(S.log.length>300) S.log.length=300; renderLog(); }
 let toastT=null; function toast(k,...a){ const el=$('toast'); if(!el) return; el.innerHTML=T(k,...a); el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2800); }
@@ -2095,6 +2160,7 @@ function showHelp(after){ openView(()=>({html:`<h3>${T('hbTitle')}</h3><div clas
  h:e=>{ if(e.target.id==='hk'){ closeCard(); if(after) after(); return 'closed'; } return false; }})); }
 $('help').addEventListener('click',()=>showHelp());
 $('codexBtn').addEventListener('click',()=>showCodex());
+$('shotBtn').addEventListener('click',()=>showKeepsake());
 $('dbgBtn').addEventListener('click',()=>showDebug());
 if(document.addEventListener) document.addEventListener('keydown',e=>{ if(e.ctrlKey&&e.shiftKey&&(e.key==='D'||e.key==='d')){ e.preventDefault(); showDebug(); } });
 function preset1963(){
