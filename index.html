@@ -158,6 +158,100 @@ td .up{color:var(--good)}td .dn{color:var(--bad)}
 #sectors .sec{white-space:normal;min-width:190px}
 #regions .rname{min-width:120px;white-space:normal}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
+/* ---------- 手机单屏布局 · single-screen phone layout ---------- */
+.tablewrap{overflow-x:auto;max-width:100%}
+.mhead,.tabbar,.subseg{display:none}
+.gos{display:none}
+.mapbtn{display:none}
+@media (max-width:600px){
+ html,body{height:100%;overflow:hidden;background-image:none}
+ .wrap{height:100vh;height:100dvh;display:flex;flex-direction:column;padding:0;max-width:none}
+ .wrap>header,.wrap>.topbar{display:none}
+ .mhead{display:flex;align-items:center;gap:8px;padding:6px 10px;padding-top:max(6px,env(safe-area-inset-top));background:var(--slate);color:var(--paper-2);flex:none}
+ .mstamp{display:flex;flex-direction:column;line-height:1.1;min-width:58px}
+ .mstamp b{font-family:var(--font-display);font-size:20px;font-variant-numeric:tabular-nums}
+ .mstamp span{font-size:10.5px;opacity:.85;white-space:nowrap}
+ .mchips{display:flex;gap:5px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none}
+ .mchips::-webkit-scrollbar{display:none}
+ .mchip{background:rgba(255,255,255,.12);border-radius:10px;padding:2px 7px;font-size:11.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+ .mchip small{opacity:.75;margin-right:3px}.mchip.bad{background:#c9584d}.mchip.warn{background:#a8792a}
+ .mmenu{background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:18px;width:36px;height:32px;border-radius:4px;cursor:pointer;flex:none}
+ #main{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:8px 10px 14px}
+ .pane{display:none}
+ body[data-pane="ov"] #pane-ov,body[data-pane="grain"] #pane-grain,body[data-pane="build"] #pane-build,body[data-pane="log"] #pane-log{display:block}
+ h2{font-size:14px;margin:12px 0 6px}h2 .hint{display:none}
+ #pane-ov h2{display:none}
+ .art.banner{margin:0 0 8px}
+ .advice{margin-top:0;padding:6px 10px;font-size:13px}
+ .stats{grid-template-columns:repeat(3,1fr);gap:5px}
+ .tile{padding:5px 7px;cursor:pointer}.tile .k{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile .v{font-size:16px}.tile .v small{font-size:10px}.tile .d{display:none}
+ .tile .bar{height:4px;margin-top:3px}
+ .medals{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:6px 0}.medal{white-space:nowrap;font-size:11px}
+ .target{font-size:12px}#reportHint{font-size:12px}
+ .rations{flex-direction:column;align-items:stretch;gap:6px;padding:8px}
+ .rations .lab{display:block;margin-bottom:4px}
+ .seg{display:flex}.seg button{flex:1;padding:7px 4px;font-size:12.5px}
+ .cloth{font-size:12px}
+ .tools{margin:4px 0}.tool{flex:1;padding:6px 6px;font-size:12.5px}
+ .mapbtn{display:block}
+ #map{display:none}body.mapOpen #map{display:block}
+ body #regions tr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px 8px;padding:7px 9px}
+ body #regions td{font-size:13.5px;grid-column:auto;min-width:0!important}
+ body #regions td[data-l]::before{font-size:10px}
+ body #regions td.rname{grid-column:1/3;font-size:15px}
+ body #regions td.roff{grid-column:3/5;text-align:right!important;font-size:12.5px;font-weight:600}
+ body #regions td.roff .td{display:none}body #regions td.roff small{display:block;font-size:10.5px;font-weight:400}
+ body #regions td.rmove{grid-column:auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end}
+ body #regions td.rmove::before{display:none}
+ body #regions td.rmove .ctl button{width:26px;height:28px}body #regions td.rmove .ctl span{min-width:30px;font-size:13px}
+ #moveHint{font-size:11.5px}
+ .subseg{display:flex;gap:0;border:1px solid var(--slate-2);border-radius:4px;overflow:hidden;margin-bottom:8px;position:sticky;top:-8px;z-index:2}
+ .subseg button{flex:1;background:var(--paper-2);border:0;border-right:1px solid var(--slate-2);padding:8px 4px;font:inherit;font-size:13px;color:var(--slate);cursor:pointer}
+ .subseg button:last-child{border-right:0}.subseg button.on{background:var(--slate);color:#fff}
+ .balwrap{display:none}
+ .projwrap,.secwrap{display:none}
+ body[data-bsub="proj"] .projwrap{display:block}
+ body[data-bsub="reg"] .secwrap,body[data-bsub="all"] .secwrap{display:block}
+ body[data-bsub="reg"] #sectors .gl,body[data-bsub="all"] #sectors .rg{display:none}
+ body[data-bsub="all"] #sectors tr:first-child{display:none}
+ #pane-build h2{display:none}
+ #sectors .sec small.eff{font-size:10.5px;line-height:1.35}
+ body #sectors tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 6px;padding:7px 4px;border-bottom:1px solid var(--line)}
+ body #sectors tr:first-child{display:none}
+ body #sectors td{border:0;padding:0!important;min-width:0!important}
+ body #sectors td.sec{grid-column:1/-1}
+ body #sectors td.c{display:flex;flex-direction:column;align-items:center;gap:2px}
+ body #sectors td.c[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--ink-2)}
+ body #sectors tr.gl td.c{grid-column:1/-1;align-items:flex-start}
+ body #sectors .ctl button{width:30px;height:30px}body #sectors .ctl span{min-width:22px}
+ body #sectors .sec{min-width:0!important}
+ body #sectors td.c>.tag,body #sectors td.c>br{display:none}
+ body #sectors td.c.dry::before{color:var(--bad);font-weight:600}
+ body #regions .tag{font-size:10px;padding:0 4px;white-space:normal;max-width:100%;display:inline-block;margin:0}
+ #sectors tr.grp{display:none}
+ .log{max-height:none}
+ .gol{display:none}.gos{display:inline}
+ .dock .btn{padding:8px 14px;font-size:15px;letter-spacing:.06em}
+ .dock{position:static;flex:none;border-radius:0;margin:0;box-shadow:0 -4px 10px rgba(0,0,0,.15)}
+ .tabbar{display:flex;flex:none;background:#efe6d2;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+ .tabbar button{flex:1;background:none;border:0;padding:6px 2px 7px;font:inherit;font-size:11.5px;color:var(--ink-2);display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;position:relative}
+ .tabbar button i{font-style:normal;font-size:18px;line-height:1.1}
+ .tabbar button.on{color:var(--red);font-weight:600}
+ .tabbar button.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;background:var(--red)}
+ .tabbar em{position:absolute;top:4px;left:56%;min-width:8px;height:8px;border-radius:5px;background:transparent;font-style:normal;font-size:9.5px;line-height:8px;color:#fff;padding:0}
+ .tabbar em.r{background:var(--bad)}.tabbar em.a{background:var(--warn)}.tabbar em.n{background:var(--slate-2);height:14px;line-height:14px;padding:0 4px;top:2px;border-radius:7px}
+ .toast{top:calc(52px + env(safe-area-inset-top))}
+ .modal{padding:8px;align-items:flex-end}
+ .card{max-height:calc(100% - 8px);padding:14px 14px 16px;border-radius:8px 8px 3px 3px}
+ .card .art{margin:2px 0 8px}
+ .choice{padding:9px 11px}
+}
+@media (max-width:600px) and (max-height:700px){
+ .art.banner{display:none}
+ .mstamp b{font-size:18px}
+ .tabbar button{padding:4px 2px 5px}.tabbar button i{font-size:16px}
+}
+
 @media (max-width:600px){
  .wrap{padding:12px 10px 24px}
  #regions tr:first-child{display:none}
@@ -194,49 +288,67 @@ html:not([lang^="zh"]) .log p{padding-left:0;text-indent:0}
 </head>
 <body>
 <div class="wrap">
+<div class="mhead" id="mhead">
+ <div class="mstamp"><b id="myear">1953</b><span id="mplan"></span></div>
+ <div class="mchips" id="mchips"></div>
+ <button class="mmenu" id="mmenu" aria-haspopup="dialog">☰</button>
+</div>
 <header>
   <h1><span data-t="title"></span><small data-t="sub"></small></h1>
   <div class="stamp" id="stamp"><b id="year">1953</b><span id="planName"></span></div>
 </header>
 <div class="topbar"><span class="lang" id="langbar"><button data-lang="zh" lang="zh">中文</button><button data-lang="en" lang="en">EN</button><button data-lang="pt" lang="pt">PT</button></span><span class="hint" id="diffTag"></span><button class="link" id="help" data-t="help"></button><button class="link" id="restart" data-t="restart"></button></div>
 
+<main id="main">
+<section class="pane" data-pane="ov" id="pane-ov">
 <canvas class="art banner" id="banner" width="760" height="170" role="img"></canvas>
-
+<div class="advice" id="advice" aria-live="polite"></div>
 <h2><span data-t="hOverview"></span></h2>
 <div class="stats" id="stats"></div>
 <div class="medals" id="medals"></div>
-<div class="advice" id="advice" aria-live="polite"></div>
+<div class="target" id="targets"></div>
+<p class="hint" id="reportHint"></p>
+</section>
 
-<h2><span data-t="hBal"></span><span class="hint" data-t="hBalHint"></span></h2>
-<div class="balance" id="balance"></div>
-<p class="hint" id="balHint"></p>
-
+<section class="pane" data-pane="grain" id="pane-grain">
 <h2><span data-t="hRation"></span><span class="hint" data-t="hRationHint"></span></h2>
 <div class="rations">
  <div><span class="lab" data-t="labRation"></span><span class="seg" id="rationSeg"><button data-v="0.87" data-t="r087"></button><button data-v="1" class="on" data-t="r100"></button><button data-v="1.13" data-t="r113"></button></span></div>
- <div><span class="lab" data-t="labCloth"></span><span id="clothNote" class="hint" style="display:inline"></span></div>
+ <div class="cloth"><span class="lab" data-t="labCloth"></span><span id="clothNote" class="hint" style="display:inline"></span></div>
 </div>
-
 <h2><span data-t="hRegions"></span><span class="hint" data-t="hRegionsHint"></span></h2>
+<div class="tools"><button class="tool" id="autoMove" data-t="autoMove"></button><button class="tool" id="clearMove" data-t="clearMove"></button><button class="tool mapbtn" id="mapToggle" aria-expanded="false"></button></div>
 <canvas class="art mapc" id="map" width="760" height="360" role="img"></canvas>
-<div style="overflow-x:auto"><table id="regions"></table></div>
+<div class="tablewrap"><table id="regions"></table></div>
 <p class="hint" id="moveHint"></p>
-<div class="tools"><button class="tool" id="autoMove" data-t="autoMove"></button><button class="tool" id="clearMove" data-t="clearMove"></button></div>
+</section>
 
-<h2><span data-t="hProjects"></span><span class="hint" data-t="hProjectsHint"></span></h2>
-<div style="overflow-x:auto"><table id="projects"></table></div>
-
-<h2><span data-t="hSectors"></span><span class="hint" data-t="hSectorsHint"></span></h2>
+<section class="pane" data-pane="build" id="pane-build">
+<div class="subseg" id="subseg" role="tablist"><button data-sub="reg" data-t="grpReg"></button><button data-sub="all" data-t="grpAll"></button><button data-sub="proj" data-t="hProjects"></button></div>
+<div class="balwrap"><h2><span data-t="hBal"></span><span class="hint" data-t="hBalHint"></span></h2>
+<div class="balance" id="balance"></div>
+<p class="hint" id="balHint"></p></div>
+<div class="projwrap"><h2><span data-t="hProjects"></span><span class="hint" data-t="hProjectsHint"></span></h2>
+<div class="tablewrap"><table id="projects"></table></div></div>
+<div class="secwrap"><h2><span data-t="hSectors"></span><span class="hint" data-t="hSectorsHint"></span></h2>
 <div class="tools"><button class="tool" id="repeatInv" data-t="repeatInv"></button><button class="tool" id="clearInv" data-t="clearInv"></button></div>
-<div style="overflow-x:auto"><table id="sectors"></table></div>
-<div class="target" id="targets"></div>
-<p class="hint" id="reportHint"></p>
-<div class="dock" id="dock" role="region"><div class="dockres" id="dockres"></div><div class="dockact"><span id="dockWhy"></span><button class="btn" id="go" data-t="go"></button></div></div>
+<div class="tablewrap"><table id="sectors"></table></div></div>
+</section>
 
+<section class="pane" data-pane="log" id="pane-log">
 <h2><span data-t="hLog"></span></h2>
 <div class="log" id="log"></div>
-
 <footer data-t="footer"></footer>
+</section>
+</main>
+
+<div class="dock" id="dock" role="region"><div class="dockres" id="dockres"></div><div class="dockact"><span id="dockWhy"></span><button class="btn" id="go"><span class="gol" data-t="go"></span><span class="gos" data-t="goShort"></span></button></div></div>
+<nav class="tabbar" id="tabbar" role="tablist">
+ <button data-p="ov" role="tab"><i>◎</i><span data-t="tabOv"></span><em></em></button>
+ <button data-p="grain" role="tab"><i>⊞</i><span data-t="tabGrain"></span><em></em></button>
+ <button data-p="build" role="tab"><i>▦</i><span data-t="tabBuild"></span><em></em></button>
+ <button data-p="log" role="tab"><i>≡</i><span data-t="tabLog"></span><em></em></button>
+</nav>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -367,6 +479,7 @@ STR.zh={
  keepL:x=>`长期占用劳动力 ${x}`, autoMove:`自动调粮`, clearMove:`清空调拨`, repeatInv:`沿用上年安排`, clearInv:`清空建设安排`,
  tAutoNone:`各地口粮都够，不需要调粮。`, tAutoDone:x=>`<span class="ok">已按缺口安排调粮 ${x}。</span>`, tRepeatPart:`上年安排超出本年物资，已按顺序尽量沿用。`, tRepeatNone:`没有上年安排可以沿用。`,
  dockMove:`调拨`, dockOk:`已平衡`, whyMat:`钢材或水泥超支`, whyLab:`劳动力超支`, whyMove:`调拨未平衡`, whyIdle:`本年尚未安排建设，结余的一半会转入下年`, dockLabel:`本年物资余额与执行`,
+ mTrust:`信任`, mWel:`民生`, mStock:`粮储`, mPop:`人口`, goShort:`执行本年计划`, tabOv:`概况`, tabGrain:`粮食`, tabBuild:`建设`, tabLog:`记录`, mapShow:`显示地图`, mapHide:`收起地图`, menuTitle:`菜单`,
  rsTitle:`重新开始？`, rsText:`当前进度将被清除。`, rsYes:`清除并重新开始`, rsNo:`继续当前任期`,
 };
 
@@ -480,6 +593,7 @@ STR.en={
  keepL:x=>`ties up ${x} of labour`, autoMove:`Auto-transfer grain`, clearMove:`Clear transfers`, repeatInv:`Repeat last year's plan`, clearInv:`Clear construction`,
  tAutoNone:`Every region has enough grain; no transfer needed.`, tAutoDone:x=>`<span class="ok">Transfers arranged to cover shortfalls: ${x}.</span>`, tRepeatPart:`Last year's plan exceeds this year's materials; as much as possible was repeated, in order.`, tRepeatNone:`There is no previous plan to repeat.`,
  dockMove:`Transfers`, dockOk:`balanced`, whyMat:`Steel or cement over budget`, whyLab:`Labour over budget`, whyMove:`Transfers unbalanced`, whyIdle:`Nothing built yet this year; half of what is unused carries over`, dockLabel:`This year's remaining materials and execute`,
+ mTrust:`Trust`, mWel:`Living`, mStock:`Grain kt`, mPop:`Pop.`, goShort:`Execute year`, tabOv:`Overview`, tabGrain:`Grain`, tabBuild:`Build`, tabLog:`Record`, mapShow:`Show map`, mapHide:`Hide map`, menuTitle:`Menu`,
  rsTitle:`Restart?`, rsText:`Current progress will be cleared.`, rsYes:`Clear and restart`, rsNo:`Continue current term`,
 };
 
@@ -593,6 +707,7 @@ STR.pt={
  keepL:x=>`ocupa ${x} de mão de obra`, autoMove:`Transferir cereal automaticamente`, clearMove:`Limpar transferências`, repeatInv:`Repetir o plano do ano passado`, clearInv:`Limpar construção`,
  tAutoNone:`Todas as regiões têm cereal suficiente; não é preciso transferir.`, tAutoDone:x=>`<span class="ok">Transferências organizadas para cobrir as faltas: ${x}.</span>`, tRepeatPart:`O plano do ano passado excede os materiais deste ano; repetiu-se o possível, por ordem.`, tRepeatNone:`Não há plano anterior para repetir.`,
  dockMove:`Transferências`, dockOk:`equilibradas`, whyMat:`Aço ou cimento acima do orçamento`, whyLab:`Mão de obra acima do orçamento`, whyMove:`Transferências desequilibradas`, whyIdle:`Ainda nada construído este ano; metade do que não for usado transita`, dockLabel:`Materiais restantes do ano e execução`,
+ mTrust:`Confiança`, mWel:`Bem-estar`, mStock:`Cereal kt`, mPop:`Pop.`, goShort:`Executar ano`, tabOv:`Resumo`, tabGrain:`Cereal`, tabBuild:`Construir`, tabLog:`Registo`, mapShow:`Mostrar mapa`, mapHide:`Ocultar mapa`, menuTitle:`Menu`,
  rsTitle:`Recomeçar?`, rsText:`O progresso atual será apagado.`, rsYes:`Apagar e recomeçar`, rsNo:`Continuar o mandato atual`,
 };
 
@@ -911,7 +1026,7 @@ const CITY=[['urumqi',87.6,43.8,{zh:'乌鲁木齐',en:'Ürümqi',pt:'Urumqi'},1]
  ['aksu',80.3,41.2,{zh:'阿克苏',en:'Aksu',pt:'Aksu'}],['korla',86.1,41.7,{zh:'库尔勒',en:'Korla',pt:'Korla'}],['turpan',89.2,42.95,{zh:'吐鲁番',en:'Turpan',pt:'Turpan'}],
  ['hami',93.5,42.8,{zh:'哈密',en:'Hami',pt:'Hami'}],['yining',81.3,43.9,{zh:'伊宁',en:'Yining',pt:'Yining'}],['shihezi',86.0,44.3,{zh:'石河子',en:'Shihezi',pt:'Shihezi'}],['karamay',84.9,45.6,{zh:'克拉玛依',en:'Karamay',pt:'Karamay'}]];
 const CENT={N:[86.9,44.9],S:[84.2,39.4],E:[92.4,41.9]}; const LBL={N:[84.4,47.4],S:[85.6,37.3],E:[94.0,41.35]};
-function drawMap(id){ const c=$(id); if(!c||!c.getContext) return; const narrow=(c.parentElement&&c.parentElement.clientWidth||760)<560;
+function drawMap(id){ const c=$(id); if(!c||!c.getContext) return; const narrow=((c.parentElement&&c.parentElement.clientWidth)||(typeof innerWidth!=='undefined'?innerWidth:760))<560;
  const W=narrow?420:760, H=narrow?560:360; const x=prep(c,W,H); if(!x) return;
  const sc=narrow?22.2:21.4, ox=narrow?14:12, oy=10; const P=(lon,lat)=>[ox+(lon-73)*0.743*sc, oy+(49.6-lat)*sc];
  rect(x,0,0,W,H,PAL.pap); paperGrain(x,W,H,9);
@@ -1347,7 +1462,7 @@ function showBrief(b){ openView(()=>{
  </div>${b.log.map(l=>`<p class="hint">${T(l.k,...l.a)}</p>`).join('')}
  <p class="hint">${T('bNext',S.in.steel,S.in.cem,S.task.oil,S.task.cotton)}</p>
  <button class="btn alt sm" id="next">${T('bGo',S.year)}</button>`,
- h:e=>{ if(e.target.id==='next'){ closeCard(); afterBrief(); return 'closed'; } return false; }, after:drawSpark};
+ h:e=>{ if(e.target.id==='next'){ closeCard(); if(isPhone()&&PANE!=='ov') setPane('ov'); afterBrief(); return 'closed'; } return false; }, after:drawSpark};
 }); }
 const HIST={grain:{1953:150,1957:190,1960:170,1962:150,1965:240,1970:270,1975:330,1977:360},oil:{1953:0,1956:1,1960:160,1965:150,1970:200,1975:300,1977:350},pop:{1953:478,1957:560,1960:680,1964:727,1970:900,1975:1150,1977:1220}};
 function histAt(k,y){ const ys=Object.keys(HIST[k]).map(Number).sort((a,b)=>a-b); let lo=ys[0],hi=ys[ys.length-1]; for(const t of ys){ if(t<=y) lo=t; } for(let i=ys.length-1;i>=0;i--){ if(ys[i]>=y) hi=ys[i]; } if(lo===hi) return HIST[k][lo]; return HIST[k][lo]+(HIST[k][hi]-HIST[k][lo])*(y-lo)/(hi-lo); }
@@ -1416,7 +1531,7 @@ function endGame(reason){
 }
 
 // ================= 存档 =================
-const KEY='tianshan-plan-v11';
+const KEY='tianshan-plan-v12';
 function save(){ try{ if(S.log.length>300) S.log.length=300; localStorage.setItem(KEY,JSON.stringify({S,REG,lvl:SECTORS.map(s=>({lvl:s.lvl,lock:s.lock}))})); }catch(e){} }
 function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(!d||d.S.gameOver) return false; S=d.S; REG=d.REG; SECTORS.forEach((s,i)=>{s.lvl=d.lvl[i].lvl; s.lock=d.lvl[i].lock;}); return true; }catch(e){ return false; } }
 function clearSave(){ try{ localStorage.removeItem(KEY); }catch(e){} }
@@ -1445,8 +1560,8 @@ function render(){
   [T('tFruit'),mv(fruitOut()),U('ktyr'),null,T('tFruitD')],
   [T('tFiber'),mv(S.last.cotton*0.65+woolOut()),U('kt'),null,T('tFiberD',ms(lv('tex')*4.2))],
  ];
- $('stats').innerHTML=tiles.map(([k,v,u,p,d])=>{ const cls=p==null?'':p<30?'bad':p<55?'warn':'good';
-  return `<div class="tile"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div>${p!=null?`<div class="bar ${cls}"><i style="width:${clamp(p,0,100)}%"></i></div>`:''}<div class="d">${d}</div></div>`;}).join('');
+ $('stats').innerHTML=tiles.map(([k,v,u,p,d])=>{ d=String(d); const cls=p==null?'':p<30?'bad':p<55?'warn':'good';
+  return `<div class="tile" data-d="${d.replace(/"/g,'&quot;')}" data-k="${String(k).replace(/"/g,'&quot;')}"><div class="k">${k}</div><div class="v">${v}<small>${u}</small></div>${p!=null?`<div class="bar ${cls}"><i style="width:${clamp(p,0,100)}%"></i></div>`:''}<div class="d">${d}</div></div>`;}).join('');
  $('medals').innerHTML=MEDALS.map(m=>`<span class="medal ${S.medals[m.id]?'got':''}" title="${tx(m.name)}">${tx(m.name)}</span>`).join('');
  const u=used(), lf=laborFree();
  const bal=(k,v,unit,d,over)=>`<div class="bal ${over?'over':''}"><div class="k">${k}</div><div class="v">${v}<small> ${unit} ${T('avail')}</small></div><div class="d">${d}</div></div>`;
@@ -1460,15 +1575,15 @@ function render(){
  $('regions').innerHTML=`<tr><th>${T('thRegion')}</th><th>${T('thOfficer')}</th><th>${T('tPop')}</th><th>${T('thHous')}</th><th>${T('thNeed')}</th><th>${T('thStock')}</th><th>${T('thGrain')}</th><th>${T('thIrr')}</th><th>${T('thWel')}</th><th>${T('thMove')}</th></tr>`+R.map(r=>{ const g=REG[r], p0=produceRegion(r,1), p=F.reg[r].p, nd=g.pop*NEED*S.ration, after=g.stock+(S.move[r]>0?S.move[r]*keepOf(r):S.move[r]);
   const cover=(after+p.grain*0.8)/nd, pc=cover<1?'bad':cover<1.15?'warn':'good', wc=g.welfare<30?'bad':g.welfare<50?'warn':'good';
   const o=S.officers?S.officers[r]:null; const cr=F.reg[r].cr; const arrow=(a,b,f)=>f(a)!==f(b)?`<span class="was">${f(a)} → </span><b class="${b>a?'up':'dn'}">${f(b)}</b>`:f(b);
-  return `<tr><td class="sec rname">${rn(r)}<small class="rsub">${tx(REGSUB[r])}</small></td><td class="sec roff" style="font-weight:500">${o?on(o.n):''}<small>${o?tx(TRAITS[o.trait].name)+' · '+tx(TRAITS[o.trait].d):''}</small></td><td class="n" data-l="${T('tPop')}">${pp(g.pop)}</td><td class="n" data-l="${T('thHous')}">${cr>1?'<span class="tag red">'+T('crowded',r0(cr*100))+'</span>':r0(cr*100)+'%'}</td><td class="n" data-l="${T('thNeed')}">${ms(nd,0)}</td><td class="n" data-l="${T('thStock')}"><span class="pill ${pc}"></span>${mv(g.stock)}${S.move[r]?' → '+mv(after):''}</td><td class="n" data-l="${T('thGrain')}">${arrow(p0.grain,p.grain,v=>mv(v,0))}</td><td class="n" data-l="${T('thIrr')}">${arrow(p0.w*100,p.w*100,v=>r0(v)+'%')}</td><td class="n" data-l="${T('thWel')}"><span class="pill ${wc}"></span>${r0(g.welfare)}</td>
+  return `<tr><td class="sec rname">${rn(r)}<small class="rsub">${tx(REGSUB[r])}</small></td><td class="sec roff" style="font-weight:500">${o?on(o.n):''}<small>${o?tx(TRAITS[o.trait].name):''}<span class="td"> · ${o?tx(TRAITS[o.trait].d):''}</span></small></td><td class="n" data-l="${T('tPop')}">${pp(g.pop)}</td><td class="n" data-l="${T('thHous')}">${cr>1?'<span class="tag red">'+T('crowded',r0(cr*100))+'</span>':r0(cr*100)+'%'}</td><td class="n" data-l="${T('thNeed')}">${ms(nd,0)}</td><td class="n" data-l="${T('thStock')}"><span class="pill ${pc}"></span>${mv(g.stock)}${S.move[r]?' → '+mv(after):''}</td><td class="n" data-l="${T('thGrain')}">${arrow(p0.grain,p.grain,v=>mv(v,0))}</td><td class="n" data-l="${T('thIrr')}">${arrow(p0.w*100,p.w*100,v=>r0(v)+'%')}</td><td class="n" data-l="${T('thWel')}"><span class="pill ${wc}"></span>${r0(g.welfare)}</td>
   <td class="c rmove" data-l="${T('thMove')}"><span class="ctl move"><button data-r="${r}" data-d="-1" aria-label="${T('ariaOut',rn(r))}">−</button><span class="${S.move[r]>0?'pos':S.move[r]<0?'neg':''}">${sg(S.move[r])}${mv(S.move[r],0)}</span><button data-r="${r}" data-d="1" aria-label="${T('ariaIn',rn(r))}">+</button></span></td></tr>`;}).join('');
  const msum=moveSum(); $('moveHint').textContent=msum!==0?T('moveUnbal',sg(msum)+ms(msum,0)):T('moveOk',ms(moveOut(),0),ms(moveCap(),0));
  let rows=`<tr><th>${T('thSector')}</th><th>${T('rs','N')}</th><th>${T('rs','S')}</th><th>${T('rs','E')}</th><th class="costh">${T('thCost')}</th></tr><tr class="grp"><td colspan="5">${T('grpReg')}</td></tr>`;
  const ctl=(id,r,cur)=>`<span class="ctl"><span class="lv">${cur}</span><button data-k="${id}:${r}" data-d="-1" aria-label="${T('dec')}">−</button><span>${S.invest[id+':'+r]||0}</span><button data-k="${id}:${r}" data-d="1" aria-label="${T('inc')}">+</button></span>`;
- SECTORS.filter(s=>s.reg).forEach(s=>{ rows+=`<tr><td class="sec">${tx(s.name)}<small class="flav">${tx(s.sub)}</small><small class="eff">${tx(s.eff)} · ${T('keepL',ZH()?nf(s.keep,1)+' 万':pp(s.keep))}</small><small class="cin">${costTxt(s.cost)}</small></td>${R.map(r=>`<td class="c">${s.id==='irr'&&waterFactor(r)<0.8?'<span class="tag red">'+T('tagDry')+'</span><br>':''}${ctl(s.id,r,s.lvl[r])}</td>`).join('')}<td class="cost">${costTxt(s.cost)}</td></tr>`; });
+ SECTORS.filter(s=>s.reg).forEach(s=>{ rows+=`<tr class="rg"><td class="sec">${tx(s.name)}<small class="flav">${tx(s.sub)}</small><small class="eff">${tx(s.eff)} · ${T('keepL',ZH()?nf(s.keep,1)+' 万':pp(s.keep))}</small><small class="cin">${costTxt(s.cost)}</small></td>${R.map(r=>`<td class="c${s.id==='irr'&&waterFactor(r)<0.8?' dry':''}" data-l="${T('rs',r)}${s.id==='irr'&&waterFactor(r)<0.8?' · '+T('tagDry'):''}">${s.id==='irr'&&waterFactor(r)<0.8?'<span class="tag red">'+T('tagDry')+'</span><br>':''}${ctl(s.id,r,s.lvl[r])}</td>`).join('')}<td class="cost">${costTxt(s.cost)}</td></tr>`; });
  rows+=`<tr class="grp"><td colspan="5">${T('grpAll')}</td></tr>`;
  SECTORS.filter(s=>!s.reg).forEach(s=>{ const locked=s.lock&&S.year<s.lock;
-  rows+=`<tr><td class="sec">${tx(s.name)}${locked?'<span class="tag">'+T('tagNoOil')+'</span>':''}<small class="flav">${tx(s.sub)}</small><small class="eff">${tx(s.eff)} · ${T('keepL',ZH()?nf(s.keep,1)+' 万':pp(s.keep))}</small><small class="cin">${costTxt(s.cost)}</small></td><td class="c" colspan="3">${locked?'<span class="hint">—</span>':`<span class="ctl"><span class="lv">${T('have',s.lvl)}</span><button data-k="${s.id}:G" data-d="-1" aria-label="${T('dec')}">−</button><span>${S.invest[s.id+':G']||0}</span><button data-k="${s.id}:G" data-d="1" aria-label="${T('inc')}">+</button></span>`}</td><td class="cost">${costTxt(s.cost)}</td></tr>`; });
+  rows+=`<tr class="gl"><td class="sec">${tx(s.name)}${locked?'<span class="tag">'+T('tagNoOil')+'</span>':''}<small class="flav">${tx(s.sub)}</small><small class="eff">${tx(s.eff)} · ${T('keepL',ZH()?nf(s.keep,1)+' 万':pp(s.keep))}</small><small class="cin">${costTxt(s.cost)}</small></td><td class="c" colspan="3">${locked?'<span class="hint">—</span>':`<span class="ctl"><span class="lv">${T('have',s.lvl)}</span><button data-k="${s.id}:G" data-d="-1" aria-label="${T('dec')}">−</button><span>${S.invest[s.id+':G']||0}</span><button data-k="${s.id}:G" data-d="1" aria-label="${T('inc')}">+</button></span>`}</td><td class="cost">${costTxt(s.cost)}</td></tr>`; });
  $('sectors').innerHTML=rows;
  $('projects').innerHTML=`<tr><th>${T('thProj')}</th><th>${T('thProg')}</th><th>${T('thPCost')}</th><th>${T('thEff')}</th><th>${T('thThis')}</th></tr>`+PROJECTS.map(p=>{ const pr=S.proj[p.id]||0, done=S.flags['done_'+p.id], open=S.year>=p.from;
   const st=done?'<span class="tag" style="background:var(--good);color:#fff">'+T('pDone')+'</span>':!open?`<span class="tag">${T('pFrom',p.from)}</span>`:pr>0?T('pProg',pr,p.years):T('pNot');
@@ -1479,13 +1594,13 @@ function render(){
  $('reportHint').textContent=S.report==='honest'?T('repHonest',r0(((S.flags.highQuota?0.30:D().quota)+(debt?0.06:0))*100),debt):T('repMargin');
  drawArt(); try{ $('banner').setAttribute('aria-label',T('bannerAlt')); $('dock').setAttribute('aria-label',T('dockLabel')); }catch(e){}
  const adv=advice(); $('advice').innerHTML=`<div class="advh">${T('advTitle')}</div>`+(adv.length?adv.map(i=>`<div class="adv l${i.lvl}"><span class="pill ${i.lvl>1?'bad':'warn'}"></span>${T(i.k,...i.a)}</div>`).join(''):`<div class="adv"><span class="pill good"></span>${T('advNone')}</div>`);
- renderDock(u,lf,msum);
+ renderDock(u,lf,msum); renderMobile(adv,P,stock,welfare,u);
 }
 // 执行栏 · action dock
 function renderDock(u,lf,msum){
  const chip=(lab,v,over)=>`<span class="chip ${over?'over':''}"><small>${lab}</small>${v}</span>`;
  const sL=S.res.steel-u.steel, cL=S.res.cem-u.cem, lL=lf-u.labor, overL=u.labor>0&&lL<-1e-9;
- $('dockres').innerHTML=chip(T('bSteel'),ms(sL),sL<-1e-9)+chip(T('bCem'),ms(cL),cL<-1e-9)+chip(T('bLab'),pp(lL),overL)+chip(T('dockMove'),msum===0?T('dockOk'):sg(msum)+ms(msum,0),msum!==0);
+ const cf=withPlan(()=>coalFactor()); $('dockres').innerHTML=chip(T('bSteel'),ms(sL),sL<-1e-9)+chip(T('bCem'),ms(cL),cL<-1e-9)+chip(T('bLab'),pp(lL),overL)+chip(T('bCoal'),r0(cf*100)+'%',cf<0.98)+chip(T('dockMove'),msum===0?T('dockOk'):sg(msum)+ms(msum,0),msum!==0);
  const nothing=u.steel===0&&u.cem===0&&!Object.keys(S.projOn).length;
  $('dockWhy').textContent=S.gameOver?'':(sL<-1e-9||cL<-1e-9)?T('whyMat'):overL?T('whyLab'):msum!==0?T('whyMove'):nothing?T('whyIdle'):'';
  $('go').disabled=S.gameOver||sL<-1e-9||cL<-1e-9||overL||msum!==0;
@@ -1525,6 +1640,32 @@ function repeatInv(){ const li=S.lastInvest||{}, lp=S.lastProj||{}; if(!Object.k
  for(const pid of Object.keys(lp)){ const p=PROJECTS.find(x=>x.id===pid); if(!p||S.flags['done_'+pid]||S.year<p.from) continue; if(fits(p.cost)) S.projOn[pid]=1; else partial=true; }
  for(const [k,v] of Object.entries(li)){ const [id,r]=k.split(':'), s=sec(id); if(s.lock&&S.year<s.lock) continue; const lm=(r!=='G'&&tr(r,'slow'))?1.2:1; for(let i=0;i<v;i++){ if(fits(s.cost,lm)) S.invest[k]=(S.invest[k]||0)+1; else { partial=true; break; } } }
  render(); if(partial) toast('tRepeatPart'); }
+// ---------- 手机：抬头、标签、分区 · phone shell ----------
+let PANE=(()=>{ try{ return sessionStorage.getItem('ts-pane')||'ov'; }catch(e){ return 'ov'; } })(), BSUB='reg', mapOpen=false, logSeen=0;
+const isPhone=()=>{ try{ return window.matchMedia('(max-width:600px)').matches; }catch(e){ return false; } };
+function setPane(p){ PANE=p; document.body.dataset.pane=p; try{ sessionStorage.setItem('ts-pane',p); }catch(e){}
+ document.querySelectorAll('#tabbar button').forEach(b=>{ const on=b.dataset.p===p; b.classList.toggle('on',on); b.setAttribute('aria-selected',on); });
+ if(p==='log') logSeen=S.log.length; const m=$('main'); if(m&&m.scrollTo) m.scrollTo(0,0); else if(m) m.scrollTop=0;
+ bannerKey=''; mapKey=''; render(); }
+function setSub(b){ BSUB=b; document.body.dataset.bsub=b; document.querySelectorAll('#subseg button').forEach(x=>x.classList.toggle('on',x.dataset.sub===b)); const m=$('main'); if(m) m.scrollTop=0; }
+function renderMobile(adv,P,stock,welfare,u){
+ const myear=$('myear'); if(!myear) return;
+ myear.textContent=S.year; $('mplan').textContent=$('planName').textContent;
+ const chip=(lab,v,cls)=>`<span class="mchip ${cls||''}"><small>${lab}</small>${v}</span>`;
+ const need=P*NEED*S.ration;
+ $('mchips').innerHTML=chip(T('mTrust'),r0(S.trust),S.trust<25?'bad':S.trust<40?'warn':'')+chip(T('mWel'),r0(welfare),welfare<30?'bad':welfare<45?'warn':'')+chip(T('mStock'),mv(stock,0),stock<need*0.15?'bad':stock<need*0.35?'warn':'')+chip(T('mPop'),pp(P));
+ const em=p=>document.querySelector(`#tabbar button[data-p="${p}"] em`);
+ const lv2=adv.filter(a=>a.lvl>1).length, gShort=adv.some(a=>a.k==='advShort'), gTight=adv.some(a=>a.k==='advTight');
+ const set=(p,cls,txt)=>{ const e=em(p); if(e){ e.className=cls||''; e.textContent=txt||''; } };
+ set('ov',lv2?'r':'',''); set('grain',gShort?'r':gTight?'a':'',''); set('build',(!Object.keys(S.invest).length&&!Object.keys(S.projOn).length&&!S.gameOver)?'a':'','');
+ const nl=Math.max(0,S.log.length-logSeen); set('log',PANE!=='log'&&nl?'n':'',PANE!=='log'&&nl?String(Math.min(nl,9)):'');
+ if(PANE==='log') logSeen=S.log.length;
+ const mt=$('mapToggle'); if(mt){ mt.textContent=mapOpen?T('mapHide'):T('mapShow'); mt.setAttribute('aria-expanded',mapOpen); }
+ document.body.classList.toggle('mapOpen',mapOpen);
+}
+function showMenu(){ openView(()=>({html:`<h3>${T('menuTitle')}</h3><div class="yr">${T('diffTag',T('diffName')[S.diff])}</div>
+ <button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
+ esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
 function renderLog(){ $('log').innerHTML=S.log.map(e=>{ let s=''; try{ s=T(e.k,...e.a); }catch(err){ s=''; } return `<p><b>${T('yp',e.y)}</b>${s}</p>`; }).join(''); }
 function addLog(y,k,...a){ S.log.unshift({y,k,a}); if(S.log.length>300) S.log.length=300; renderLog(); }
 let toastT=null; function toast(k,...a){ const el=$('toast'); if(!el) return; el.innerHTML=T(k,...a); el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2800); }
@@ -1564,6 +1705,11 @@ $('projects').addEventListener('click',e=>{ const b=e.target.closest('button'); 
  S.projOn[p.id]=1; render(); });
 $('rationSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; S.ration=+b.dataset.v; render(); });
 $('go').addEventListener('click',execute);
+$('tabbar').addEventListener('click',e=>{ const b=e.target.closest('button[data-p]'); if(b) setPane(b.dataset.p); });
+$('subseg').addEventListener('click',e=>{ const b=e.target.closest('button[data-sub]'); if(b) setSub(b.dataset.sub); });
+$('mmenu').addEventListener('click',showMenu);
+$('mapToggle').addEventListener('click',()=>{ mapOpen=!mapOpen; mapKey=''; render(); });
+$('stats').addEventListener('click',e=>{ const t=e.target.closest('.tile'); if(t&&isPhone()){ const el=$('toast'); el.innerHTML=`<b>${t.dataset.k}</b>：${t.dataset.d}`; el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),3200); } });
 $('autoMove').addEventListener('click',autoMove); $('clearMove').addEventListener('click',()=>{ S.move={N:0,S:0,E:0}; render(); });
 $('repeatInv').addEventListener('click',repeatInv); $('clearInv').addEventListener('click',()=>{ S.invest={}; S.projOn={}; render(); });
 let rzT=null; if(typeof window!=='undefined'&&window.addEventListener) window.addEventListener('resize',()=>{ clearTimeout(rzT); rzT=setTimeout(()=>{ bannerKey=''; mapKey=''; drawArt(); if(view) refreshView(); },150); });
@@ -1594,6 +1740,7 @@ function newGame(){ openView(()=>({html:`<div class="lang" style="margin-bottom:
   const k=e.target.closest('.choice')?.dataset.k; if(!k) return false; S.diff=k; closeCard();
   if(pickedSc==='short'){ preset1963(); addLog(1963,'logStart63',k); } else addLog(1953,'logStart',k);
   startYear(); showHelp(()=>showPlanChoice()); return 'closed'; }})); }
+document.body.dataset.pane=PANE; document.body.dataset.bsub=BSUB; setSub(BSUB); document.querySelectorAll('#tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.p===PANE));
 applyStatic();
 if(load()){ render(); renderLog(); addLog(S.year,'logLoaded'); if(!S.planBase&&(S.year-1953)%5===0) showPlanChoice(); }
 else { startYear(); newGame(); }
