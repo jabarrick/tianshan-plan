@@ -160,6 +160,21 @@ td .up{color:var(--good)}td .dn{color:var(--bad)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 /* ---------- 手机单屏布局 · single-screen phone layout ---------- */
 .tablewrap{overflow-x:auto;max-width:100%}
+.cxcats{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 8px}
+.cxcats button{background:var(--paper);border:1px solid var(--slate-2);color:var(--slate);font:inherit;font-size:12.5px;padding:3px 9px;border-radius:12px;cursor:pointer}
+.cxcats button.on{background:var(--slate);color:#fff}
+.cxq{width:100%;box-sizing:border-box;font:inherit;font-size:14px;padding:7px 10px;border:1px solid var(--line);border-radius:4px;background:#fff}
+.cxe{border-top:1px solid var(--line);padding:8px 0}.cxe h4{margin:0 0 3px;font-family:var(--font-display);color:var(--slate);font-size:15px}
+.cxe p{margin:0;font-size:13.5px}.cxe .meta{font-size:12px;color:var(--ink-2);margin-top:3px}.cxe.lock{opacity:.55}
+.cxn{font-size:12px;color:var(--ink-2);margin:4px 0}
+.dbgbox{display:none;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;background:#1d2228;color:#cfe3b8;border-radius:4px;padding:8px 10px;margin:8px 0;overflow-x:auto;white-space:pre}
+body.dbgShow .dbgbox{display:block}
+.dbgsec{margin:10px 0 2px;font-family:var(--font-display);color:var(--slate);font-size:14px}
+.dbggrid{display:flex;flex-wrap:wrap;gap:5px}.dbggrid .tool{flex:0 1 auto}
+.dbggrid .tool.on{background:var(--slate);color:#fff}
+.dbgta{width:100%;box-sizing:border-box;height:90px;font:11px ui-monospace,monospace;margin-top:5px}
+.dbgchip{display:inline-block;background:#7a3b8c;color:#fff;font-size:11px;padding:1px 7px;border-radius:9px;margin-left:6px;vertical-align:middle}
+.dbgwarn{background:#f6e7c8;border:1px solid var(--ochre);padding:8px 10px;border-radius:4px;font-size:13px}
 .tg{display:inline-block;font-size:11px;padding:0 6px;border-radius:9px;margin:1px 3px 1px 0;line-height:17px;font-weight:500;white-space:nowrap;font-style:normal}
 .tg.m{background:#dbe6cf;color:#2f5428}.tg.f{background:#f2d4cf;color:#8a2a22}.tg.c{background:#e4e0d4;color:#5c554a}
 .off{border:1px solid var(--line);background:var(--paper);border-radius:4px;padding:8px 10px;margin-top:6px}
@@ -310,12 +325,13 @@ html:not([lang^="zh"]) .log p{padding-left:0;text-indent:0}
   <h1><span data-t="title"></span><small data-t="sub"></small></h1>
   <div class="stamp" id="stamp"><b id="year">1953</b><span id="planName"></span></div>
 </header>
-<div class="topbar"><span class="lang" id="langbar"><button data-lang="zh" lang="zh">中文</button><button data-lang="en" lang="en">EN</button><button data-lang="pt" lang="pt">PT</button></span><span class="hint" id="diffTag"></span><button class="link" id="help" data-t="help"></button><button class="link" id="restart" data-t="restart"></button></div>
+<div class="topbar"><span class="lang" id="langbar"><button data-lang="zh" lang="zh">中文</button><button data-lang="en" lang="en">EN</button><button data-lang="pt" lang="pt">PT</button></span><span class="hint" id="diffTag"></span><button class="link" id="codexBtn" data-t="codex"></button><button class="link" id="help" data-t="help"></button><button class="link" id="dbgBtn" data-t="dbg"></button><button class="link" id="restart" data-t="restart"></button></div>
 
 <main id="main">
 <section class="pane" data-pane="ov" id="pane-ov">
 <canvas class="art banner" id="banner" width="760" height="170" role="img"></canvas>
 <div class="advice" id="advice" aria-live="polite"></div>
+<div class="dbgbox" id="dbgbox"></div>
 <h2><span data-t="hOverview"></span></h2>
 <div class="stats" id="stats"></div>
 <div class="medals" id="medals"></div>
@@ -472,6 +488,7 @@ STR.zh={
  <p><b>上报决定征购。</b>征购按上报数扣，不看实产；加码上报换信任，但会挤口粮，还可能被核查。五年指标按实产考核，报得越高任务越重。</p>
  <p><b>重点工程与人事。</b>跨年工程每年投一次算一年进度，停了不罚只是拖。“官员名单”里每位干部有一项长处、一项短处；每个五年计划期可以从候选干部中挑一人任命到指定地区，撤下的人不再复用。</p>
  <p><b>快捷操作。</b>“本年要点”列出最紧迫的问题；“自动调粮”按各地缺口安排调拨；“沿用上年安排”在物资允许的范围内重复上年的建设；底部执行栏随时显示物资余额。</p>
+ <p><b>百科。</b>顶部“百科”（手机在 ☰ 菜单里）列出所有机制公式、部门数据、官员长短处和历史术语；遇到过的事件会收进百科。</p>
  <p><b>撤职线。</b>任一地区民生低于 8、全区民生低于 15、中央信任低于 10。</p>`,
  // 开局
  ngTitle:`就职`, ngText:`你被任命为新疆省（1955年起为自治区）计划委员会主任。全省不足五百万人，分布在北疆、南疆、东疆三大片。这里没有市场：钢材、水泥由中央按指标调入，原油、棉花按统购任务上调，粮食统购统销、按定量发放。你要编制物资平衡表，在水、地、人、运之间做取舍，直到1977年。`,
@@ -492,7 +509,20 @@ STR.zh={
  keepL:x=>`长期占用劳动力 ${x}`, autoMove:`自动调粮`, clearMove:`清空调拨`, repeatInv:`沿用上年安排`, clearInv:`清空建设安排`,
  tAutoNone:`各地口粮都够，不需要调粮。`, tAutoDone:x=>`<span class="ok">已按缺口安排调粮 ${x}。</span>`, tRepeatPart:`上年安排超出本年物资，已按顺序尽量沿用。`, tRepeatNone:`没有上年安排可以沿用。`,
  dockMove:`调拨`, dockOk:`已平衡`, whyMat:`钢材或水泥超支`, whyLab:`劳动力超支`, whyMove:`调拨未平衡`, whyIdle:`本年尚未安排建设，结余的一半会转入下年`, dockLabel:`本年物资余额与执行`,
- mTrust:`信任`, mWel:`民生`, mStock:`粮储`, mPop:`人口`, goShort:`执行本年计划`, hrBtn:`官员名单`, hrTitle:`官员名单`, hrRuleOn:p=>`${p}期间可任免一位地区专员（中央信任 −2）。`, hrRuleOff:`本届计划期的任免已用完，下一个五年计划再调整。`,
+ mTrust:`信任`, mWel:`民生`, mStock:`粮储`, mPop:`人口`, goShort:`执行本年计划`, codex:`百科`, dbg:`调试`, cxSub:`机制、地区、部门、工程、人事、事件、荣誉与术语`, cxSearch:`搜索百科…`,
+ cxCat:{mech:'机制',reg:'地区',sec:'部门',proj:'重点工程',off:'人事',ev:'事件',medal:'荣誉',gloss:'术语'},
+ cxReg:(p,w,d,dr,c)=>`1953 年人口 ${p} · 基础水情 ${w}% · 每块耕地/棉田耗水 ${d} 个百分点 · 旱灾概率 ${dr}% · 棉花系数 ×${c}`,
+ cxRegional:`分区建设`, cxYears:n=>`工期 ${n} 年`, cxMerit:`长处`, cxFlaw:`短处`, cxBg:`出身，仅作人物背景`,
+ cxRand:`随机事件`, cxLocked:`尚未经历`, cxLockedD:`在游戏中遇到这个事件后解锁，跨局保留。`, cxEvN:(a,b)=>`已解锁 ${a} / ${b} 个事件`,
+ cxGot:y=>`${y} 年获得`, cxNotYet:`本局尚未获得`,
+ dbgTitle:`调试模式`, dbgSub:`改动立即生效；本局终评会标为“调试局”。也可以按 Ctrl+Shift+D 或在网址末尾加 #debug 打开。`,
+ dbgWarn:`调试模式可以改资源、改数值、快进年份和触发任意事件，用于测试和体验剧情。开启后，本局会永久标记为“调试局”，终评不作为正式成绩。`,
+ dbgEnable:`开启调试模式`, dbgChip:`调试`, dbgGame:`调试局`, dbgGameD:`本局使用过调试模式，得分仅供参考。`,
+ dbgL:{res:'资源与数值',grain:'三地粮库装满',pop:'人口 +10%',time:'时间',skip1:'快进 1 年',skip5:'快进 5 年',wx:'下一年天气',wxrand:'随机',wxdrought:'全区大旱',wxgood:'全区丰年',wxnormal:'全区平年',
+  rules:'规则',god:'免撤职',show:'显示内部数值',nohr:'重置本届任免',cands:'刷新候选干部',build:'建设',oil:'解锁石油',proj:'完成全部重点工程',all1:'所有设施 +1',ev:'触发事件',save:'存档',exp:'导出存档',imp:'从文本导入',off:'关闭调试模式'},
+ logDbg:x=>`<span class="ev">［调试］${x}</span>`, logDbgOn:`<span class="ev">［调试］已开启调试模式，本局标为调试局。</span>`,
+ tDbgExp:`存档已导出到文本框，可复制保存。`, tDbgImp:`<span class="ok">存档已导入。</span>`, tDbgBad:`<span class="ev">文本不是有效的存档。</span>`,
+ hrBtn:`官员名单`, hrTitle:`官员名单`, hrRuleOn:p=>`${p}期间可任免一位地区专员（中央信任 −2）。`, hrRuleOff:`本届计划期的任免已用完，下一个五年计划再调整。`,
  hrCur:`现任专员`, hrCands:`候选干部`, hrTo:`任命到`, hrAppoint:r=>`任命为${r}专员`, hrAge:a=>`${a} 岁`, hrTen:y=>`任职 ${y} 年`, hrNone:`暂无可用候选人。`,
  hrOpen:`打开官员名单`, hrCanOne:`本届可任免一位`, tHR:r=>`<span class="ok">${rn(r)}专员已任命。</span>`,
  logIll:(r,a,b)=>`${rn(r)}专员${on(a)}因病离任，${on(b)}接任。`, advHR:(r,n,f)=>`${rn(r)}专员${on(n)}${tx(FLAWS[f].name)}，本届还可以在“官员名单”里换人。`,
@@ -591,6 +621,7 @@ STR.en={
  <p><b>Reports set procurement.</b> Procurement is taken on reported output, not real output. Padding reports wins trust but squeezes rations and may trigger an audit. Five-year targets are judged on real output, and the higher you report, the heavier the quotas.</p>
  <p><b>Key projects and personnel.</b> Each year you fund a multi-year project counts as a year of progress; pausing costs nothing but time. In “Officials” every cadre has one strength and one weakness; once per five-year plan you may pick a candidate and appoint them to a region of your choice, and anyone you remove does not return.</p>
  <p><b>Shortcuts.</b> “This year's priorities” lists the most urgent problems; “Auto-transfer grain” arranges transfers to cover each region's shortfall; “Repeat last year's plan” repeats last year's construction as far as materials allow; the bar at the bottom always shows what is left.</p>
+ <p><b>Encyclopedia.</b> “Encyclopedia” at the top (in the ☰ menu on phones) lists every formula, sector figure, official's strengths and weaknesses and historical term; events you have met are added to it.</p>
  <p><b>Dismissal lines.</b> Any region's livelihood below 8, overall livelihood below 15, or central trust below 10.</p>`,
  ngTitle:`Appointment`, ngText:`You have been appointed director of the Planning Commission of Xinjiang Province (an autonomous region from 1955). The province has fewer than five million people, spread across three great areas: the north, the south and the east. There is no market here: steel and cement are allocated by the Centre against quotas, crude oil and cotton are delivered under state purchase quotas, and grain is bought and sold by the state and issued by ration. You must draw up the material balances and choose between water, land, people and transport until 1977.`,
  ngChoose:`Choose a scenario, then a difficulty to begin:`, scFull:`Full term 1953–1977`, scFullD:`Start with the First Five-Year Plan; 25 years`, scShort:`Readjustment start 1963–1977`,
@@ -610,7 +641,20 @@ STR.en={
  keepL:x=>`ties up ${x} of labour`, autoMove:`Auto-transfer grain`, clearMove:`Clear transfers`, repeatInv:`Repeat last year's plan`, clearInv:`Clear construction`,
  tAutoNone:`Every region has enough grain; no transfer needed.`, tAutoDone:x=>`<span class="ok">Transfers arranged to cover shortfalls: ${x}.</span>`, tRepeatPart:`Last year's plan exceeds this year's materials; as much as possible was repeated, in order.`, tRepeatNone:`There is no previous plan to repeat.`,
  dockMove:`Transfers`, dockOk:`balanced`, whyMat:`Steel or cement over budget`, whyLab:`Labour over budget`, whyMove:`Transfers unbalanced`, whyIdle:`Nothing built yet this year; half of what is unused carries over`, dockLabel:`This year's remaining materials and execute`,
- mTrust:`Trust`, mWel:`Living`, mStock:`Grain kt`, mPop:`Pop.`, goShort:`Execute year`, hrBtn:`Officials`, hrTitle:`Officials`, hrRuleOn:p=>`During the ${p} you may appoint one regional commissioner (central trust −2).`, hrRuleOff:`This plan period's appointment has been used; you can change again in the next five-year plan.`,
+ mTrust:`Trust`, mWel:`Living`, mStock:`Grain kt`, mPop:`Pop.`, goShort:`Execute year`, codex:`Encyclopedia`, dbg:`Debug`, cxSub:`Mechanics, regions, sectors, projects, personnel, events, honours and terms`, cxSearch:`Search the encyclopedia…`,
+ cxCat:{mech:'Mechanics',reg:'Regions',sec:'Sectors',proj:'Key projects',off:'Personnel',ev:'Events',medal:'Honours',gloss:'Terms'},
+ cxReg:(p,w,d,dr,c)=>`1953 population ${p} · base water ${w}% · each farmland/cotton unit uses ${d} points of water · drought chance ${dr}% · cotton factor ×${c}`,
+ cxRegional:`regional construction`, cxYears:n=>`${n}-year build`, cxMerit:`Strength`, cxFlaw:`Weakness`, cxBg:`Background, for flavour only`,
+ cxRand:`Random event`, cxLocked:`not yet seen`, cxLockedD:`Unlocks once you meet this event in a game; kept across games.`, cxEvN:(a,b)=>`${a} of ${b} events unlocked`,
+ cxGot:y=>`earned in ${y}`, cxNotYet:`not earned this game`,
+ dbgTitle:`Debug mode`, dbgSub:`Changes apply at once; this game's final review will be marked as a debug game. You can also open it with Ctrl+Shift+D or by adding #debug to the URL.`,
+ dbgWarn:`Debug mode lets you change resources and values, skip years and trigger any event, for testing or exploring the story. Once enabled, this game is permanently marked as a debug game and its final review does not count as an official result.`,
+ dbgEnable:`Enable debug mode`, dbgChip:`debug`, dbgGame:`debug game`, dbgGameD:`This game used debug mode; the score is for reference only.`,
+ dbgL:{res:'Resources and values',grain:'Fill all granaries',pop:'Population +10%',time:'Time',skip1:'Skip 1 year',skip5:'Skip 5 years',wx:'Next year\'s weather',wxrand:'Random',wxdrought:'Drought everywhere',wxgood:'Bumper year everywhere',wxnormal:'Normal year everywhere',
+  rules:'Rules',god:'No dismissal',show:'Show internal values',nohr:'Reset this period\'s appointment',cands:'New candidates',build:'Construction',oil:'Unlock oil',proj:'Complete all key projects',all1:'All facilities +1',ev:'Trigger an event',save:'Save data',exp:'Export save',imp:'Import from text',off:'Turn off debug mode'},
+ logDbg:x=>`<span class="ev">[debug] ${x}</span>`, logDbgOn:`<span class="ev">[debug] Debug mode enabled; this game is marked as a debug game.</span>`,
+ tDbgExp:`Save exported to the text box; copy it to keep it.`, tDbgImp:`<span class="ok">Save imported.</span>`, tDbgBad:`<span class="ev">That text is not a valid save.</span>`,
+ hrBtn:`Officials`, hrTitle:`Officials`, hrRuleOn:p=>`During the ${p} you may appoint one regional commissioner (central trust −2).`, hrRuleOff:`This plan period's appointment has been used; you can change again in the next five-year plan.`,
  hrCur:`Serving commissioners`, hrCands:`Candidates`, hrTo:`Appoint to`, hrAppoint:r=>`Appoint to ${r}`, hrAge:a=>`age ${a}`, hrTen:y=>`${y} yrs in post`, hrNone:`No candidates available.`,
  hrOpen:`Open the officials list`, hrCanOne:`one appointment available`, tHR:r=>`<span class="ok">New ${rn(r)} commissioner appointed.</span>`,
  logIll:(r,a,b)=>`${rn(r)} commissioner ${on(a)} leaves through illness; ${on(b)} takes over.`, advHR:(r,n,f)=>`${rn(r)} commissioner ${on(n)} is ${tx(FLAWS[f].name).toLowerCase()}; you can still replace one commissioner this plan period under “Officials”.`,
@@ -709,6 +753,7 @@ STR.pt={
  <p><b>As declarações fixam a requisição.</b> A requisição incide sobre a produção declarada, não a real. Inflacionar ganha confiança, mas aperta as rações e pode provocar uma auditoria. As metas quinquenais avaliam-se pela produção real, e quanto mais alto declarares, mais pesadas as quotas.</p>
  <p><b>Projetos-chave e pessoal.</b> Cada ano em que financias um projeto plurianual conta como um ano de progresso; parar só custa tempo. Em “Quadros” cada quadro tem um ponto forte e um ponto fraco; uma vez por plano quinquenal podes escolher um candidato e nomeá-lo para a região que quiseres, e quem for afastado não volta.</p>
  <p><b>Atalhos.</b> As “Prioridades do ano” listam os problemas mais urgentes; “Transferir cereal automaticamente” organiza as transferências para cobrir a falta de cada região; “Repetir o plano do ano passado” repete a construção do ano anterior na medida do possível; a barra no fundo mostra sempre o que resta.</p>
+ <p><b>Enciclopédia.</b> A “Enciclopédia” no topo (no menu ☰ no telemóvel) reúne todas as fórmulas, dados dos setores, pontos fortes e fracos dos quadros e termos históricos; os eventos que encontraste ficam lá registados.</p>
  <p><b>Limites de destituição.</b> Bem-estar de qualquer região abaixo de 8, bem-estar global abaixo de 15 ou confiança do Centro abaixo de 10.</p>`,
  ngTitle:`Nomeação`, ngText:`Foste nomeado diretor da Comissão de Planeamento da Província de Xinjiang (região autónoma a partir de 1955). A província tem menos de cinco milhões de habitantes, repartidos por três grandes zonas: Norte, Sul e Leste. Aqui não há mercado: o aço e o cimento são atribuídos pelo Centro segundo quotas, o petróleo bruto e o algodão são entregues segundo quotas de compra estatal, e o cereal é comprado e vendido pelo Estado e distribuído por ração. Terás de elaborar os balanços materiais e escolher entre água, terra, pessoas e transportes até 1977.`,
  ngChoose:`Escolhe o cenário e depois uma dificuldade para começar:`, scFull:`Mandato completo 1953–1977`, scFullD:`Começa com o Primeiro Plano Quinquenal; 25 anos`, scShort:`Início no Reajustamento 1963–1977`,
@@ -728,7 +773,20 @@ STR.pt={
  keepL:x=>`ocupa ${x} de mão de obra`, autoMove:`Transferir cereal automaticamente`, clearMove:`Limpar transferências`, repeatInv:`Repetir o plano do ano passado`, clearInv:`Limpar construção`,
  tAutoNone:`Todas as regiões têm cereal suficiente; não é preciso transferir.`, tAutoDone:x=>`<span class="ok">Transferências organizadas para cobrir as faltas: ${x}.</span>`, tRepeatPart:`O plano do ano passado excede os materiais deste ano; repetiu-se o possível, por ordem.`, tRepeatNone:`Não há plano anterior para repetir.`,
  dockMove:`Transferências`, dockOk:`equilibradas`, whyMat:`Aço ou cimento acima do orçamento`, whyLab:`Mão de obra acima do orçamento`, whyMove:`Transferências desequilibradas`, whyIdle:`Ainda nada construído este ano; metade do que não for usado transita`, dockLabel:`Materiais restantes do ano e execução`,
- mTrust:`Confiança`, mWel:`Bem-estar`, mStock:`Cereal kt`, mPop:`Pop.`, goShort:`Executar ano`, hrBtn:`Quadros`, hrTitle:`Lista de quadros`, hrRuleOn:p=>`Durante o ${p} podes nomear um comissário regional (confiança do Centro −2).`, hrRuleOff:`A nomeação deste período já foi usada; podes mudar de novo no próximo plano quinquenal.`,
+ mTrust:`Confiança`, mWel:`Bem-estar`, mStock:`Cereal kt`, mPop:`Pop.`, goShort:`Executar ano`, codex:`Enciclopédia`, dbg:`Depuração`, cxSub:`Mecânicas, regiões, setores, projetos, pessoal, eventos, distinções e termos`, cxSearch:`Pesquisar na enciclopédia…`,
+ cxCat:{mech:'Mecânicas',reg:'Regiões',sec:'Setores',proj:'Projetos-chave',off:'Pessoal',ev:'Eventos',medal:'Distinções',gloss:'Termos'},
+ cxReg:(p,w,d,dr,c)=>`População em 1953: ${p} · água base ${w}% · cada unidade de terra/algodão consome ${d} pontos de água · probabilidade de seca ${dr}% · fator do algodão ×${c}`,
+ cxRegional:`construção regional`, cxYears:n=>`obra de ${n} anos`, cxMerit:`Ponto forte`, cxFlaw:`Ponto fraco`, cxBg:`Origem, apenas para contexto`,
+ cxRand:`Evento aleatório`, cxLocked:`ainda não visto`, cxLockedD:`Desbloqueia quando encontrares este evento num jogo; mantém-se entre jogos.`, cxEvN:(a,b)=>`${a} de ${b} eventos desbloqueados`,
+ cxGot:y=>`obtida em ${y}`, cxNotYet:`ainda não obtida neste jogo`,
+ dbgTitle:`Modo de depuração`, dbgSub:`As alterações têm efeito imediato; a avaliação final deste jogo será marcada como jogo de depuração. Também se abre com Ctrl+Shift+D ou acrescentando #debug ao endereço.`,
+ dbgWarn:`O modo de depuração permite alterar recursos e valores, avançar anos e desencadear qualquer evento, para testar ou explorar a história. Depois de ativado, este jogo fica marcado para sempre como jogo de depuração e a avaliação final não conta como resultado oficial.`,
+ dbgEnable:`Ativar o modo de depuração`, dbgChip:`depuração`, dbgGame:`jogo de depuração`, dbgGameD:`Este jogo usou o modo de depuração; a pontuação é apenas indicativa.`,
+ dbgL:{res:'Recursos e valores',grain:'Encher os três celeiros',pop:'População +10%',time:'Tempo',skip1:'Avançar 1 ano',skip5:'Avançar 5 anos',wx:'Tempo do próximo ano',wxrand:'Aleatório',wxdrought:'Seca em todo o lado',wxgood:'Ano farto em todo o lado',wxnormal:'Ano normal em todo o lado',
+  rules:'Regras',god:'Sem destituição',show:'Mostrar valores internos',nohr:'Repor a nomeação do período',cands:'Novos candidatos',build:'Construção',oil:'Desbloquear petróleo',proj:'Concluir todos os projetos-chave',all1:'Todas as instalações +1',ev:'Desencadear um evento',save:'Jogo guardado',exp:'Exportar',imp:'Importar do texto',off:'Desligar o modo de depuração'},
+ logDbg:x=>`<span class="ev">[depuração] ${x}</span>`, logDbgOn:`<span class="ev">[depuração] Modo de depuração ativado; este jogo fica marcado como jogo de depuração.</span>`,
+ tDbgExp:`Jogo exportado para a caixa de texto; copia-o para o guardar.`, tDbgImp:`<span class="ok">Jogo importado.</span>`, tDbgBad:`<span class="ev">Esse texto não é um jogo guardado válido.</span>`,
+ hrBtn:`Quadros`, hrTitle:`Lista de quadros`, hrRuleOn:p=>`Durante o ${p} podes nomear um comissário regional (confiança do Centro −2).`, hrRuleOff:`A nomeação deste período já foi usada; podes mudar de novo no próximo plano quinquenal.`,
  hrCur:`Comissários em funções`, hrCands:`Candidatos`, hrTo:`Nomear para`, hrAppoint:r=>`Nomear para ${r}`, hrAge:a=>`${a} anos`, hrTen:y=>`${y} anos no cargo`, hrNone:`Não há candidatos disponíveis.`,
  hrOpen:`Abrir a lista de quadros`, hrCanOne:`uma nomeação disponível`, tHR:r=>`<span class="ok">Novo comissário nomeado: ${rn(r)}.</span>`,
  logIll:(r,a,b)=>`${rn(r)}: ${NAMES[a].f?'a':'o'} ${comPT(a)} ${on(a)} sai por doença; assume ${on(b)}.`, advHR:(r,n,f)=>`${rn(r)}: ${NAMES[n].f?'a':'o'} ${comPT(n)} ${on(n)} é ${tx(FLAWS[f].name).toLowerCase()}; ainda podes substituir um comissário neste período em “Quadros”.`,
@@ -1169,6 +1227,95 @@ const SCN={
 };
 function drawVignette(id,key){ const c=$(id); const W=480,H=150; const x=prep(c,W,H); if(!x) return; const f=SCN[key]; if(!f){ base(x,W,H,{peaks:1,gy:100}); } else f(x,W,H); paperGrain(x,W,H,13); rect(x,0.5,0.5,W-1,H-1,null,'rgba(47,74,94,.45)',1); }
 
+// ================= 百科 · Encyclopedia · Enciclopédia =================
+// 机制条目与术语条目；部门、工程、人事、事件、荣誉条目由游戏数据生成
+const CODEX={
+ mech:[
+  {k:'water',
+   zh:{t:'水与灌溉保证率',b:'各地灌溉保证率 = 基础水情 + 水利 × 9 个百分点 − （耕地 + 棉田）× 地区耗水。北疆耗水 1.4、南疆 2.0、东疆 2.4 个百分点。保证率乘到粮棉产量上，低于 80% 标“缺水”，下限 40%、上限 125%。所以先修水利再垦荒，南疆、东疆尤其如此。'},
+   en:{t:'Water and the irrigation guarantee',b:'Each region\'s irrigation guarantee = base water + irrigation × 9 points − (farmland + cotton) × regional water use. Water use per unit is 1.4 points in the north, 2.0 in the south and 2.4 in the east. The guarantee multiplies grain and cotton output; below 80% the region is marked short of water, with a floor of 40% and a ceiling of 125%. Build irrigation before reclaiming land, above all in the south and east.'},
+   pt:{t:'Água e garantia de rega',b:'A garantia de rega de cada região = água base + rega × 9 pontos − (terras + algodão) × consumo regional. O consumo por unidade é de 1,4 pontos no Norte, 2,0 no Sul e 2,4 no Leste. A garantia multiplica a produção de cereal e algodão; abaixo de 80% a região fica marcada com falta de água, com mínimo de 40% e máximo de 125%. Constrói rega antes de arrotear, sobretudo no Sul e no Leste.'}},
+  {k:'grain',
+   zh:{t:'口粮、征购与调拨',b:'标准定量每人每年 230 公斤原粮。征购 = 上报产量 × 征购率（历史难度 20%），按各地实产比例摊派。地区粮库 + 实产 − 征购不足以发放定量时，按比例减发，民生与人口随之受损；全区缺粮人口越多，中央信任扣得越多。粮库满仓后的余粮自动超购上调，可换回少量信任。调拨有损耗：一般 6%，修通南疆公路后 3%，调入东疆 2%。'},
+   en:{t:'Rations, procurement and transfers',b:'The standard ration is 230 kg of unhusked grain per person per year. Procurement = reported output × procurement rate (20% on Historical), shared out in proportion to each region\'s real output. If granary + output − procurement cannot cover the ration, rations are cut pro rata and livelihood and population suffer; the more people go short across the region, the more central trust you lose. Once granaries are full, the surplus is bought up automatically for a little trust. Transfers lose grain: 6% normally, 3% once the southern highway is built, 2% into the east.'},
+   pt:{t:'Rações, requisição e transferências',b:'A ração padrão é de 230 kg de cereal por pessoa e por ano. Requisição = produção declarada × taxa de requisição (20% na dificuldade Histórica), repartida em proporção da produção real de cada região. Se celeiro + produção − requisição não chegar para a ração, esta é reduzida proporcionalmente e o bem-estar e a população sofrem; quanto mais gente fica sem cereal, mais confiança do Centro perdes. Com os celeiros cheios, o excedente é comprado automaticamente em troca de alguma confiança. As transferências perdem cereal: 6% em geral, 3% depois da estrada do Sul, 2% para o Leste.'}},
+  {k:'report',
+   zh:{t:'上报口径与核查',b:'征购按上报数计算，不看实产。加码 15% 或翻番 40% 能换来信任，但会挤占口粮，差额计入“累计虚报”。每年被中央工作组核查的概率约为 6% + 累计虚报 ÷ 800 万吨（上限 45%），一旦查出，扣信任 8 + 累计虚报 ÷ 12（上限 35），累计虚报清零。好大喜功的专员会在你如实上报时也多报一成。'},
+   en:{t:'Reporting basis and audits',b:'Procurement is based on reported, not real, output. A 15% margin or 40% doubling wins trust but squeezes rations, and the difference is added to accumulated over-reporting. Each year the chance of a central audit is about 6% + accumulated over-reporting ÷ 8 Mt (capped at 45%); if caught, you lose 8 + over-reporting ÷ 120 kt in trust (capped at 35) and the tally resets. A boastful commissioner adds 10% even when you report truthfully.'},
+   pt:{t:'Critério de declaração e auditorias',b:'A requisição baseia-se na produção declarada, não na real. Uma margem de 15% ou a duplicação de 40% ganham confiança, mas apertam as rações, e a diferença soma-se à sobredeclaração acumulada. Todos os anos a probabilidade de auditoria central é de cerca de 6% + sobredeclaração acumulada ÷ 8 Mt (máximo 45%); se fores apanhado, perdes 8 + sobredeclaração ÷ 120 kt de confiança (máximo 35) e o total volta a zero. Um comissário fanfarrão acrescenta 10% mesmo quando declaras a verdade.'}},
+  {k:'mat',
+   zh:{t:'钢材、水泥与中央调入',b:'每年钢材来源 = 中央调入 + 区内钢产 × 80% + 上年结余；水泥 = 中央调入 + 区内产量 + 上年结余。中央调入钢材 ≈（4 + 信任 × 0.06）×（0.75 + 0.45 × 上年统购完成率）× 难度系数，水泥类似。未用完的一半转入下年（钢材最多 10 万吨、水泥最多 15 万吨）。东疆瓜果上调也会换回少量建材。'},
+   en:{t:'Steel, cement and central allocation',b:'Each year steel = central allocation + 80% of regional steel output + carry-over; cement = central allocation + regional output + carry-over. Central steel ≈ (4 + trust × 0.06) × (0.75 + 0.45 × last year\'s quota fulfilment) × difficulty factor (×10 kt), and cement works similarly. Half of what is unused carries over (up to 100 kt of steel and 150 kt of cement). Fruit shipped from the east also brings back a little building material.'},
+   pt:{t:'Aço, cimento e afetação central',b:'Todos os anos, aço = afetação central + 80% da produção regional de aço + transição; cimento = afetação central + produção regional + transição. O aço central ≈ (4 + confiança × 0,06) × (0,75 + 0,45 × cumprimento da quota do ano anterior) × fator de dificuldade (×10 kt), e o cimento é semelhante. Metade do que não for usado transita (até 100 kt de aço e 150 kt de cimento). As frutas enviadas do Leste também trazem algum material de construção.'}},
+  {k:'labor',
+   zh:{t:'劳动力',b:'劳动力总量 = 人口 × 42%。每处设施建成后长期占用劳动力（建设表每行标明），本年建设还要额外用工。各业长期占用超过总量时，所有行业按比例降低开工率（最低 60%）。补充劳动力靠住房：住房吸引迁入，民生高于 55 时迁入更多；住房不足会拥挤，压低民生。'},
+   en:{t:'Labour',b:'Total labour = population × 42%. Every facility keeps tying up labour once built (each construction row shows how much), and this year\'s building needs extra labour on top. If facilities tie up more than the total, every sector runs at a reduced rate (down to 60%). Labour is replenished through housing: housing attracts migrants, more of them when livelihood is above 55; too little housing means crowding, which lowers livelihood.'},
+   pt:{t:'Mão de obra',b:'Mão de obra total = população × 42%. Cada instalação continua a ocupar mão de obra depois de construída (cada linha de construção indica quanto), e a construção do ano exige mão de obra adicional. Se as instalações ocuparem mais do que o total, todos os setores funcionam a ritmo reduzido (até 60%). A mão de obra repõe-se com habitação: a habitação atrai migrantes, mais ainda com bem-estar acima de 55; habitação insuficiente provoca sobrelotação, que baixa o bem-estar.'}},
+  {k:'chain',
+   zh:{t:'工业链：煤电、技术员、农机',b:'钢铁、水泥、纺织、石油和城镇都要用煤，煤电供给不足时钢铁、水泥、纺织按比例减产（最低 50%）。厂矿越多需要的技术员越多，技术员不足时效率最低降到 75%，教育卫生每年培养技术员，苏联专家撤离会带走三成。钢铁机械每年产农机，农机保有量相对耕地越高，粮食最多增产 25%，农机每年折旧 6%。'},
+   en:{t:'Industrial chain: power, technicians, machinery',b:'Steel, cement, textiles, oil and towns all burn coal; when coal and power fall short, steel, cement and textiles scale down (to no less than 50%). More plants need more technicians, and without enough of them efficiency can drop to 75%; education & health train technicians every year, and the Soviet withdrawal takes away 30% of them. Steel & machinery turns out farm machinery each year; the more machinery relative to farmland, the higher grain yields, up to +25%; machinery depreciates 6% a year.'},
+   pt:{t:'Cadeia industrial: energia, técnicos, maquinaria',b:'Aço, cimento, têxteis, petróleo e cidades consomem carvão; quando falta carvão e energia, aço, cimento e têxteis reduzem a produção (até um mínimo de 50%). Mais fábricas exigem mais técnicos e, se faltarem, a eficiência pode cair para 75%; a educação e saúde formam técnicos todos os anos, e a retirada soviética leva 30% deles. A siderurgia produz maquinaria agrícola todos os anos; quanto mais maquinaria em relação às terras, maior o rendimento do cereal, até +25%; a maquinaria deprecia 6% ao ano.'}},
+  {k:'welfare',
+   zh:{t:'民生',b:'各地民生每年向目标值靠拢 35%。目标值以口粮为主（足额约 +42，宽裕再加，减发时急剧下降），再加上布票、肉食、住房和教育卫生的加分（口粮不足时这些加分也打折），减去拥挤、动荡和专员短处的扣分。民生过低会让农民出工不出力，粮食最多减产 15%。任一地区低于 8 或全区低于 15 就会被撤职。'},
+   en:{t:'Livelihood',b:'Each year a region\'s livelihood moves 35% of the way towards a target. The target is driven mainly by rations (about +42 for a full ration, more if generous, falling sharply when rations are cut), plus points for cloth, meat, housing and education & health (which shrink when rations are short), minus crowding, unrest and commissioners\' weaknesses. Low livelihood means farmers work half-heartedly, cutting grain by up to 15%. Any region below 8, or the whole region below 15, means dismissal.'},
+   pt:{t:'Bem-estar',b:'Todos os anos o bem-estar de cada região aproxima-se 35% de um valor-alvo. O alvo depende sobretudo das rações (cerca de +42 com ração completa, mais se generosa, caindo a pique quando há cortes), mais pontos por tecido, carne, habitação e educação e saúde (que encolhem quando falta cereal), menos sobrelotação, agitação e fraquezas dos comissários. Bem-estar baixo faz os camponeses trabalharem sem vontade, cortando até 15% do cereal. Qualquer região abaixo de 8, ou a média abaixo de 15, significa destituição.'}},
+  {k:'trust',
+   zh:{t:'中央信任',b:'加分来源：完成统购任务（+2.5 左右）、余粮超购、瓜果上调、加码上报、五年计划全面完成、重点工程竣工和部分事件。扣分来源：每年自然衰减（历史 −1、严酷 −2）、缺粮、统购完成率低于 80%、核查查出虚报、五年计划未完成、任免专员（−2）。信任越高，加分的边际效果越小。低于 10 被免职。'},
+   en:{t:'Central trust',b:'Gains: meeting state quotas (about +2.5), surplus procurement, fruit shipments, padded reports, fulfilling a five-year plan, finishing key projects and some events. Losses: yearly decay (−1 on Historical, −2 on Harsh), grain shortages, quota fulfilment below 80%, audits that uncover over-reporting, missed five-year targets and appointing a commissioner (−2). The higher your trust, the smaller each gain. Below 10 you are removed.'},
+   pt:{t:'Confiança do Centro',b:'Ganhos: cumprir as quotas estatais (cerca de +2,5), compra de excedentes, envio de frutas, declarações inflacionadas, cumprir um plano quinquenal, concluir projetos-chave e alguns eventos. Perdas: decaimento anual (−1 na Histórica, −2 na Severa), falta de cereal, cumprimento das quotas abaixo de 80%, auditorias que descobrem sobredeclaração, metas quinquenais falhadas e nomear um comissário (−2). Quanto mais alta a confiança, menor cada ganho. Abaixo de 10 és afastado.'}},
+  {k:'score',
+   zh:{t:'终评得分',b:'得分 = 人口 × 0.25 + 全区民生 × 2 + 中央信任 + 工业实物量指数 × 0.6 + 粮食自给率 × 120 − 地区民生差距 × 0.8 + 荣誉 × 15，账目干净 +20、有过虚报 −30。再乘难度系数（平稳 0.85、严酷 1.25）和剧本系数（调整起步 0.85）。中途免职得分减半且不计难度系数；使用过调试模式的局会标为“调试局”。'},
+   en:{t:'Final score',b:'Score = population (10k) × 0.25 + livelihood × 2 + central trust + industrial index × 0.6 + grain self-sufficiency × 120 − regional livelihood gap × 0.8 + 15 per honour, +20 for clean books or −30 if you ever over-reported. It is then multiplied by difficulty (Gentle 0.85, Harsh 1.25) and scenario (Readjustment start 0.85). Removal from office halves the score with no difficulty bonus; games that used debug mode are marked as debug games.'},
+   pt:{t:'Pontuação final',b:'Pontuação = população (dezenas de milhar) × 0,25 + bem-estar × 2 + confiança do Centro + índice industrial × 0,6 + autossuficiência cerealífera × 120 − diferença de bem-estar entre regiões × 0,8 + 15 por distinção, +20 com contas limpas ou −30 se alguma vez sobredeclaraste. Depois multiplica-se pela dificuldade (Suave 0,85, Severa 1,25) e pelo cenário (início no Reajustamento 0,85). O afastamento reduz a pontuação a metade, sem bónus de dificuldade; os jogos com modo de depuração ficam marcados como jogos de depuração.'}},
+ ],
+ gloss:[
+  {k:'tonggou',
+   zh:{t:'统购统销',b:'1953 年底起实行的粮食计划收购与计划供应制度：农民按国家规定的价格和数量交售余粮，城镇居民凭证定量购买。此后棉花、油料等也陆续纳入。游戏里的“征购”与“定量供应”即由此而来。'},
+   en:{t:'State monopoly of purchase and sale',b:'From late 1953, grain was bought from farmers at state-set prices and quotas and sold to urban residents in fixed rations against coupons. Cotton, oil crops and other goods were added later. The game\'s procurement and rationing come from this system.'},
+   pt:{t:'Monopólio estatal de compra e venda',b:'A partir do fim de 1953, o cereal passou a ser comprado aos camponeses a preços e quotas fixados pelo Estado e vendido aos habitantes das cidades em rações fixas, mediante senhas. Mais tarde juntaram-se o algodão, as oleaginosas e outros bens. A requisição e o racionamento do jogo vêm deste sistema.'}},
+  {k:'piao',
+   zh:{t:'粮票与布票',b:'定量供应的凭证。粮票按人发放，布票自 1954 年起在全国推行，每人每年的布匹定量随产量浮动。票证制度一直延续到 1990 年代初才逐步取消。'},
+   en:{t:'Grain and cloth coupons',b:'Ration coupons. Grain coupons were issued per person; cloth coupons were introduced nationwide from 1954, with each person\'s yearly cloth ration rising and falling with output. The coupon system was only phased out in the early 1990s.'},
+   pt:{t:'Senhas de cereal e de tecido',b:'Senhas de racionamento. As senhas de cereal eram atribuídas por pessoa; as de tecido foram introduzidas em todo o país a partir de 1954, e a ração anual de cada pessoa variava com a produção. O sistema de senhas só foi abolido no início dos anos 1990.'}},
+  {k:'balance',
+   zh:{t:'物资平衡表',b:'仿照苏联做法的计划工具：把钢材、水泥、煤炭等主要物资的“来源”（调入、生产、库存）与“用途”（基建、生产、储备）逐项列平，再按计划分配。游戏的平衡表即是简化版。'},
+   en:{t:'Material balances',b:'A planning tool modelled on Soviet practice: for each key material such as steel, cement or coal, sources (allocations, output, stocks) were balanced item by item against uses (construction, production, reserves), and the material was then allocated by plan. The game\'s balance sheets are a simplified version.'},
+   pt:{t:'Balanços materiais',b:'Instrumento de planeamento inspirado na prática soviética: para cada material essencial, como aço, cimento ou carvão, as origens (afetações, produção, existências) eram equilibradas item a item com os usos (construção, produção, reservas), e o material era depois distribuído segundo o plano. Os balanços do jogo são uma versão simplificada.'}},
+  {k:'fyp',
+   zh:{t:'五年计划',b:'第一个五年计划为 1953—1957 年，第二个为 1958—1962 年；1963—1965 年为国民经济调整时期，之后是第三（1966—1970）、第四（1971—1975）个五年计划。游戏为便于考核，把期次统一按每五年切分，起止年份与历史略有出入。'},
+   en:{t:'Five-Year Plans',b:'The First Five-Year Plan ran from 1953 to 1957 and the Second from 1958 to 1962; 1963–1965 was a period of economic readjustment, followed by the Third (1966–1970) and Fourth (1971–1975) Plans. For scoring, the game cuts every period into five years, so its start and end years differ slightly from history.'},
+   pt:{t:'Planos quinquenais',b:'O Primeiro Plano Quinquenal decorreu de 1953 a 1957 e o Segundo de 1958 a 1962; 1963–1965 foi um período de reajustamento económico, seguido do Terceiro (1966–1970) e do Quarto (1971–1975) planos. Para a avaliação, o jogo divide todos os períodos em cinco anos, pelo que as datas diferem ligeiramente da história.'}},
+  {k:'bingtuan',
+   zh:{t:'新疆生产建设兵团',b:'1954 年 10 月由驻疆部队集体转业组建，在玛纳斯河、塔里木河等流域屯垦，兴修水利、开办农场和工矿。游戏中兵团带来耕地、住房和持续的迁入人口。'},
+   en:{t:'Xinjiang Production and Construction Corps',b:'Formed in October 1954 from army units stationed in Xinjiang that were demobilised en masse. It reclaimed land in basins such as the Manas and Tarim, built irrigation and set up farms, mines and factories. In the game the Corps brings farmland, housing and a steady flow of migrants.'},
+   pt:{t:'Corpo de Produção e Construção de Xinjiang',b:'Criado em outubro de 1954 a partir de unidades do exército estacionadas em Xinjiang, desmobilizadas em bloco. Arroteou terras em bacias como as do Manas e do Tarim, construiu rega e criou quintas, minas e fábricas. No jogo, o Corpo traz terras, habitação e um fluxo contínuo de migrantes.'}},
+  {k:'karez',
+   zh:{t:'坎儿井',b:'吐鲁番、哈密一带的传统地下水利工程：从山前打一串竖井，在地下挖暗渠，把地下水引到绿洲，蒸发少、受旱情影响小。这就是游戏里东疆抗旱优势的来源。'},
+   en:{t:'Karez wells',b:'A traditional underground irrigation system around Turpan and Hami: a line of vertical shafts is dug from the foothills and joined by a tunnel that carries groundwater to the oasis, losing little to evaporation and holding up in droughts. It is the source of the east\'s drought resistance in the game.'},
+   pt:{t:'Poços karez',b:'Sistema tradicional de rega subterrânea na zona de Turpan e Hami: uma fila de poços verticais é escavada a partir do sopé das montanhas e ligada por um túnel que leva a água subterrânea até ao oásis, com pouca evaporação e boa resistência à seca. É a origem da resistência do Leste à seca no jogo.'}},
+  {k:'karamay',
+   zh:{t:'克拉玛依油田',b:'1955 年 10 月黑油山一号井喷出工业油流，1956 年确认为大油田，是新中国成立后发现的第一个大油田。游戏把出油事件放在 1956 年。'},
+   en:{t:'Karamay oilfield',b:'Well No. 1 at Heiyoushan struck commercial oil in October 1955, and in 1956 the field was confirmed as a major oilfield, the first discovered after 1949. The game places the strike in 1956.'},
+   pt:{t:'Campo petrolífero de Karamay',b:'O poço n.º 1 de Heiyoushan jorrou petróleo comercial em outubro de 1955 e, em 1956, o campo foi confirmado como grande jazida, a primeira descoberta depois de 1949. O jogo situa o acontecimento em 1956.'}},
+  {k:'lanxin',
+   zh:{t:'兰新铁路',b:'从兰州通往新疆的干线铁路，1952 年动工，1962 年铺轨到乌鲁木齐，1966 年全线正式运营。通车前新疆的物资主要靠汽车长途转运。'},
+   en:{t:'Lanxin Railway',b:'The trunk line from Lanzhou to Xinjiang. Work began in 1952, track reached Ürümqi in 1962 and the whole line entered full service in 1966. Before it opened, goods reached Xinjiang mainly by long-haul truck.'},
+   pt:{t:'Ferrovia Lanxin',b:'A linha principal de Lanzhou a Xinjiang. As obras começaram em 1952, a via chegou a Urumqi em 1962 e a linha entrou em pleno serviço em 1966. Até lá, as mercadorias chegavam a Xinjiang sobretudo de camião, em longas viagens.'}},
+  {k:'sanxian',
+   zh:{t:'三线建设',b:'1964 年起出于战备考虑，在西南、西北内陆大规模布局工业和交通。各省区需要调出物资和人员支援，游戏中的“三线建设调钢”事件即取材于此。'},
+   en:{t:'Third Front construction',b:'From 1964, for war-preparedness reasons, industry and transport were built up on a large scale deep in the south-west and north-west. Provinces had to send materials and people to support it, which is the basis of the game\'s “Steel for the Third Front” event.'},
+   pt:{t:'Construção da Terceira Frente',b:'A partir de 1964, por razões de preparação para a guerra, a indústria e os transportes foram desenvolvidos em grande escala no interior do sudoeste e do noroeste. As províncias tinham de enviar materiais e pessoas para a apoiar, o que inspira o evento “Aço para a Terceira Frente” do jogo.'}},
+  {k:'tarim',
+   zh:{t:'塔里木河下游断流',b:'上游垦区大量引水后，塔里木河下游河道逐渐干涸，尾闾台特玛湖在 1970 年代初干涸，大面积胡杨林衰退。游戏为了让玩家早些面对这一取舍，把断流事件提前到 1961 年。'},
+   en:{t:'The lower Tarim runs dry',b:'As upstream farms drew more water, the lower Tarim gradually dried up; its terminal lake, Taitema, disappeared in the early 1970s and large stands of Euphrates poplar declined. The game moves the event forward to 1961 so that players face the trade-off earlier.'},
+   pt:{t:'O curso inferior do Tarim seca',b:'À medida que as quintas a montante captavam mais água, o curso inferior do Tarim foi secando; o lago terminal, Taitema, desapareceu no início dos anos 1970 e extensos bosques de choupo-do-eufrates declinaram. O jogo antecipa o evento para 1961 para que o jogador enfrente esse dilema mais cedo.'}},
+  {k:'zhibian',
+   zh:{t:'支边青年',b:'1960 年代中期，上海、天津等地成批知识青年响应号召赴新疆，主要进入兵团农场，人数达十余万。'},
+   en:{t:'Frontier-support youth',b:'In the mid-1960s, groups of educated young people from Shanghai, Tianjin and other cities answered the call to go to Xinjiang, mostly to Corps farms; they numbered over a hundred thousand.'},
+   pt:{t:'Jovens de apoio à fronteira',b:'Em meados dos anos 1960, grupos de jovens instruídos de Xangai, Tianjin e outras cidades responderam ao apelo para ir para Xinjiang, sobretudo para as quintas do Corpo; foram mais de cem mil.'}},
+ ],
+};
+
 // ================= 数据 =================
 const R=['N','S','E'];
 const NEED=0.23; // 万吨/万人·年：1 万人 × 230 公斤 = 0.23 万吨
@@ -1329,7 +1476,7 @@ function execute(){
  PROJECTS.forEach(p=>{ if(S.projOn[p.id]){ S.proj[p.id]=(S.proj[p.id]||0)+1; if(S.proj[p.id]>=p.years&&!S.flags['done_'+p.id]){ S.flags['done_'+p.id]=1; p.apply(); S.trust=clamp(S.trust+4,0,100); log.push({k:'logProjDone',a:[p.id]}); } } }); S.projOn={};
  R.forEach(r=>{ const mv_=S.move[r]; REG[r].stock=Math.max(0,REG[r].stock+(mv_>0? mv_*keepOf(r) : mv_*outLoss(r))); });
  const G=produceGlobal(); let gTot=0,cTot=0,mTot=0; const wx=[]; const out={};
- R.forEach(r=>{ const g=REG[r], roll=Math.random(), dr=g.drought*D().drought; let weather=1,wt='';
+ R.forEach(r=>{ const g=REG[r], roll=S.dbgWx==='drought'?0:S.dbgWx==='good'?0.99:S.dbgWx==='normal'?0.5:Math.random(), dr=g.drought*D().drought; let weather=1,wt='';
   if(roll<dr){weather=0.72;wt='drought';} else if(roll<dr+0.1){weather=0.86;wt='frost';} else if(roll<dr+0.16){weather=0.88;wt='locust';} else if(roll>0.88){weather=1.08;wt='good';}
   if(wt==='locust'&&S.flags.noLocust>=S.year){ weather=1; wt=''; }
   let karez=0; if(r==='E'&&weather<1&&wt!=='locust'){ weather=1-(1-weather)*0.5; karez=1; }
@@ -1378,9 +1525,10 @@ function execute(){
  if((S.year-1952)%5===0 && S.planBase) evaluatePlan();
  checkMedals();
  const bad=R.find(r=>REG[r].welfare<8);
- if(bad) return endGame({k:'endRegion',a:[bad]});
+ S.dbgWx=null;
+ if(!S.dbgGod){ if(bad) return endGame({k:'endRegion',a:[bad]});
  if(welfare<15) return endGame({k:'endWelfare',a:[]});
- if(S.trust<10) return endGame({k:'endTrust',a:[]});
+ if(S.trust<10) return endGame({k:'endTrust',a:[]}); }
  S.year++;
  if(S.year>1977) return endGame(null);
  startYear(); pulse();
@@ -1431,9 +1579,7 @@ function showPlanChoice(){ openView(()=>{
  <div class="hrsum">${R.map(r=>offLine(r)).join('')}</div><button class="tool hrgo" data-hrgo="1">${T('hrOpen')}${hrAvail()?' · '+T('hrCanOne'):''}</button>`,
  h:e=>{ if(e.target.closest('[data-hrgo]')){ showRoster(()=>showPlanChoice()); return false; }
   const mode=e.target.closest('.choice')?.dataset.mode; if(!mode) return false;
-  const mul={steady:1.0,active:1.15,leap:1.3}[mode];
-  S.planBase={mode,y,targets:{grain:g5*mul,cotton:c5*mul,oil:o5*mul}};
-  setTask(); addLog(S.year,'logPlanSet',y,mode); render(); save(); return true; }};
+  choosePlan(mode); return true; }};
 }); }
 
 // ================= 事件（效果） =================
@@ -1481,11 +1627,11 @@ const RANDOM=[
  {id:'wool',when:()=>lv('tex')>=2,fx:[()=>{sec('tex').lvl+=1;S.res.steel=Math.max(0,S.res.steel-1);},()=>{}]},
 ];
 const ev=k=>{ const e=EVT[k]; return e[L]||e.zh; };
-function showEvent(key,fx,year){ openView(()=>{ const e=ev(key);
+function showEvent(key,fx,year){ cxMark(key); openView(()=>{ const e=ev(key);
  const ch=e.ch.map((c,i)=>`<button class="choice" data-i="${i}"><b>${c[0]}</b>${c[1]?`<small>${c[1]}</small>`:''}</button>`).join('');
  return {html:`<h3>${e.ti}</h3><div class="yr">${T('evYear',year)}</div><canvas class="art" id="vign" width="480" height="150" role="img" aria-label="${e.ti}"></canvas><p>${e.tx}</p>${ch}`, after:()=>drawVignette('vign',key), h:x=>{
   const b=x.target.closest('.choice'); if(!b) return false; const i=+b.dataset.i;
-  closeCard(); fx[i](); addLog(year,'logEvent',key,i);
+  closeCard(); fx[i](); addLog(year,'logEvent',key,i); if(typeof key==='number'){ S.evDone=S.evDone||{}; S.evDone[key]=1; }
   S.trust=clamp(S.trust,0,100); S.res.steel=Math.max(0,r1(S.res.steel)); S.res.cem=Math.max(0,r1(S.res.cem));
   R.forEach(r=>{REG[r].stock=Math.max(0,REG[r].stock);REG[r].welfare=clamp(REG[r].welfare,0,100);}); render(); save();
   if((year-1953)%5===0 && !S.planBase) showPlanChoice();
@@ -1560,7 +1706,7 @@ function endGame(reason){
  return {html:`<h3>${reason?T('eRemoved'):T('eFinal')}</h3><div class="yr">${T('eYr',span,T('diffName')[S.diff])}</div>
  <p>${reason?T(reason.k,...reason.a):T('eFinish')}</p>
  <canvas class="art" id="endBanner" width="760" height="170" role="img" aria-label="${T('endBan',S.year)}"></canvas><p class="capt">${T('endBan',Math.min(S.year,1977))}</p>
- <div class="score">${T('grade')[gk]}</div>
+ <div class="score">${T('grade')[gk]}${S.cheated?`<span class="dbgchip">${T('dbgGame')}</span>`:''}</div>${S.cheated?`<p class="hint">${T('dbgGameD')}</p>`:''}
  <h3 style="font-size:15px;margin-top:6px">${T('eHist')}</h3>
  <canvas class="spark" id="cmp1" width="500" height="110"></canvas><canvas class="spark" id="cmp2" width="500" height="110"></canvas><canvas class="spark" id="cmp3" width="500" height="110"></canvas>
  <h3 style="font-size:15px;margin-top:6px">${T('eEpi')}</h3>${epilogue()}
@@ -1580,7 +1726,7 @@ function endGame(reason){
 }
 
 // ================= 存档 =================
-const KEY='tianshan-plan-v13';
+const KEY='tianshan-plan-v14';
 function save(){ try{ if(S.log.length>300) S.log.length=300; localStorage.setItem(KEY,JSON.stringify({S,REG,lvl:SECTORS.map(s=>({lvl:s.lvl,lock:s.lock}))})); }catch(e){} }
 function load(){ try{ const d=JSON.parse(localStorage.getItem(KEY)||'null'); if(!d||d.S.gameOver) return false; S=d.S; REG=d.REG; SECTORS.forEach((s,i)=>{s.lvl=d.lvl[i].lvl; s.lock=d.lvl[i].lock;}); return true; }catch(e){ return false; } }
 function clearSave(){ try{ localStorage.removeItem(KEY); }catch(e){} }
@@ -1641,6 +1787,8 @@ function render(){
   $('targets').innerHTML=T('tgt',planName(S.planBase.y),`<b>${mv(done.g,0)}</b>/${ms(t.grain,0)}`,`<b>${mv(done.c,0)}</b>/${ms(t.cotton,0)}`,`<b>${mv(done.o,0)}</b>/${ms(t.oil,0)}`); } else $('targets').innerHTML='';
  const debt=S.flags.debt&&S.year<=1965;
  $('reportHint').textContent=S.report==='honest'?T('repHonest',r0(((S.flags.highQuota?0.30:D().quota)+(debt?0.06:0))*100),debt):T('repMargin');
+ document.body.classList.toggle('dbgShow',!!(S.dbg&&S.dbgShow)); if(S.dbg&&S.dbgShow) $('dbgbox').textContent=dbgInternals();
+ $('diffTag').innerHTML=T('diffTag',T('diffName')[S.diff])+(S.dbg?`<span class="dbgchip">${T('dbgChip')}</span>`:'');
  drawArt(); try{ $('banner').setAttribute('aria-label',T('bannerAlt')); $('dock').setAttribute('aria-label',T('dockLabel')); }catch(e){}
  const adv=advice(); $('advice').innerHTML=`<div class="advh">${T('advTitle')}</div>`+(adv.length?adv.map(i=>`<div class="adv l${i.lvl}"><span class="pill ${i.lvl>1?'bad':'warn'}"></span>${T(i.k,...i.a)}</div>`).join(''):`<div class="adv"><span class="pill good"></span>${T('advNone')}</div>`);
  renderDock(u,lf,msum); renderMobile(adv,P,stock,welfare,u);
@@ -1703,7 +1851,7 @@ function renderMobile(adv,P,stock,welfare,u){
  myear.textContent=S.year; $('mplan').textContent=$('planName').textContent;
  const chip=(lab,v,cls)=>`<span class="mchip ${cls||''}"><small>${lab}</small>${v}</span>`;
  const need=P*NEED*S.ration;
- $('mchips').innerHTML=chip(T('mTrust'),r0(S.trust),S.trust<25?'bad':S.trust<40?'warn':'')+chip(T('mWel'),r0(welfare),welfare<30?'bad':welfare<45?'warn':'')+chip(T('mStock'),mv(stock,0),stock<need*0.15?'bad':stock<need*0.35?'warn':'')+chip(T('mPop'),pp(P));
+ $('mchips').innerHTML=(S.dbg?`<span class="mchip" style="background:#7a3b8c">${T('dbgChip')}</span>`:'')+chip(T('mTrust'),r0(S.trust),S.trust<25?'bad':S.trust<40?'warn':'')+chip(T('mWel'),r0(welfare),welfare<30?'bad':welfare<45?'warn':'')+chip(T('mStock'),mv(stock,0),stock<need*0.15?'bad':stock<need*0.35?'warn':'')+chip(T('mPop'),pp(P));
  const em=p=>document.querySelector(`#tabbar button[data-p="${p}"] em`);
  const lv2=adv.filter(a=>a.lvl>1).length, gShort=adv.some(a=>a.k==='advShort'), gTight=adv.some(a=>a.k==='advTight');
  const set=(p,cls,txt)=>{ const e=em(p); if(e){ e.className=cls||''; e.textContent=txt||''; } };
@@ -1734,9 +1882,83 @@ function showRoster(after){ if(!hrTarget) hrTarget=R.slice().sort((a,b)=>REG[a].
    const ap=e.target.closest('[data-ap]'); if(ap){ appoint(hrTarget,+ap.dataset.ap); toast('tHR',hrTarget); refreshView(); return false; }
    if(e.target.closest('[data-hrx]')){ closeCard(); if(after) after(); return 'closed'; } return false; }};
  }); }
+// ---------- 百科 · encyclopedia ----------
+const CXK='tianshan-codex';
+function cxSeen(){ try{ return JSON.parse(localStorage.getItem(CXK)||'[]'); }catch(e){ return []; } }
+function cxMark(k){ try{ const a=cxSeen(); if(!a.includes(String(k))){ a.push(String(k)); localStorage.setItem(CXK,JSON.stringify(a)); } }catch(e){} }
+let cxCat='mech';
+function cxEntries(cat){ const E=(t,b,m,lock)=>({t,b,m,lock});
+ if(cat==='mech'||cat==='gloss') return CODEX[cat].map(x=>E(tx(x).t,tx(x).b));
+ if(cat==='reg') return R.map(r=>{ const g=REG0()[r]; return E(rn(r),tx(REGSUB[r]),T('cxReg',pp(g.pop),r0(g.water*100),r0(g.demand*1000)/10,r0(g.drought*100),g.cotMul)); });
+ if(cat==='sec') return SECTORS.map(x=>E(tx(x.name),tx(x.sub)+' — '+tx(x.eff),costTxt(x.cost)+' · '+T('keepL',ZH()?nf(x.keep,1)+' 万':pp(x.keep))+(x.reg?' · '+T('cxRegional'):'')+(x.lock?' · '+T('pFrom',x.lock):'')));
+ if(cat==='proj') return PROJECTS.map(p=>E(tx(p.name),tx(p.sub)+' — '+tx(p.eff),T('pFrom',p.from)+' · '+T('cxYears',p.years)+' · '+costTxt(p.cost)));
+ if(cat==='off') return [...Object.keys(TRAITS).map(k=>E(chipM(k),tx(TRAITS[k].d),T('cxMerit'))),...Object.keys(FLAWS).map(k=>E(chipF(k),tx(FLAWS[k].d),T('cxFlaw'))),...Object.keys(BGS).map(k=>E(tx(BGS[k]),T('cxBg'),''))];
+ if(cat==='ev'){ const seen=cxSeen(); return [...EVENTS.map(e=>e.year),...RANDOM.map(e=>e.id)].map(k=>{ const ok=seen.includes(String(k)); const e=ev(k); return ok?E(e.ti,e.tx,(typeof k==='number'?T('evYear',k)+' · ':T('cxRand')+' · ')+e.ch.map(c=>c[0]).join(' / ')):E(typeof k==='number'?T('evYear',k)+' · '+T('cxLocked'):T('cxRand')+' · '+T('cxLocked'),T('cxLockedD'),'',true); }); }
+ if(cat==='medal') return MEDALS.map(m=>E(tx(m.name),S.medals[m.id]?T('cxGot',S.medals[m.id]):T('cxNotYet'),''));
+ return []; }
+function showCodex(after){ openView(()=>{ const cats=['mech','reg','sec','proj','off','ev','medal','gloss'];
+ const list=cxEntries(cxCat); const seenN=cxSeen().length, total=EVENTS.length+RANDOM.length;
+ return {html:`<h3>${T('codex')}</h3><div class="yr">${T('cxSub')}</div>
+ <input class="cxq" id="cxq" type="search" placeholder="${T('cxSearch')}" aria-label="${T('cxSearch')}">
+ <div class="cxcats">${cats.map(c=>`<button data-cx="${c}" class="${c===cxCat?'on':''}">${T('cxCat')[c]}</button>`).join('')}</div>
+ ${cxCat==='ev'?`<div class="cxn">${T('cxEvN',seenN,total)}</div>`:''}
+ <div id="cxlist">${list.map(x=>`<div class="cxe${x.lock?' lock':''}"><h4>${x.t}</h4><p>${x.b}</p>${x.m?`<div class="meta">${x.m}</div>`:''}</div>`).join('')}</div>
+ <button class="btn alt sm" data-cxx="1">${T('hbOk')}</button>`,
+ esc:()=>{ closeCard(); if(after) after(); },
+ after:()=>{ const q=$('cxq'); if(q&&q.addEventListener) q.addEventListener('input',()=>{ const v=q.value.trim().toLowerCase(); document.querySelectorAll('#cxlist .cxe').forEach(el=>{ el.style.display=!v||el.textContent.toLowerCase().includes(v)?'':'none'; }); }); },
+ h:e=>{ const c=e.target.closest('[data-cx]'); if(c){ cxCat=c.dataset.cx; refreshView(); return false; } if(e.target.closest('[data-cxx]')){ closeCard(); if(after) after(); return 'closed'; } return false; }};
+}); }
+// ---------- 作弊调试 · debug mode ----------
+function dbgAct(fn,label){ S.cheated=true; S.dbg=true; fn(); addLog(S.year,'logDbg',label); render(); save(); }
+function choosePlan(mode){ const b=totalBase(), g5=b.grain*5, c5=b.cotton*5, o5=(sec('oil').lock&&S.year<sec('oil').lock?3:b.oil)*5, y=S.year;
+ const mul={steady:1.0,active:1.15,leap:1.3}[mode]; S.planBase={mode,y,targets:{grain:g5*mul,cotton:c5*mul,oil:o5*mul}}; setTask(); addLog(S.year,'logPlanSet',y,mode); render(); save(); }
+function dbgSkip(n){ S.cheated=true; S.dbg=true; for(let k=0;k<n&&!S.gameOver;k++){ closeCard();
+  if(!S.planBase&&(S.year-1953)%5===0) choosePlan('steady');
+  const evy=EVENTS.find(e=>e.year===S.year); S.evDone=S.evDone||{}; if(evy&&!S.evDone[S.year]){ evy.fx[0](); S.evDone[S.year]=1; addLog(S.year,'logEvent',evy.year,0); }
+  autoMove(); repeatInv(); if(S.res.steel-used().steel<-1e-9||S.res.cem-used().cem<-1e-9||used().labor>laborFree()){ S.invest={}; S.projOn={}; }
+  if(moveSum()!==0) S.move={N:0,S:0,E:0};
+  execute(); }
+ if(!S.gameOver){ closeCard(); afterBrief(); } }
+function dbgInternals(){ const G=produceGlobal(); const L=[];
+ L.push(`year ${S.year}  trust ${r1(S.trust)}  taskHit ${r1(S.taskHit*100)}%  inflated ${r1(S.inflated)} (audit ${r0(Math.min(0.45,0.06+S.inflated/800)*100)}%)  cheated ${!!S.cheated}`);
+ L.push(`coal ${r1(G.coalS)}/${r1(G.coalD)} f=${r1(G.cf*100)}%  labour ${r1(laborKept())}/${r1(laborTotal())} f=${r1(laborFactor()*100)}%  tech f=${r1(techFactor()*100)}%  mech f=${r1(mechFactor()*100)}%  cap ${r0(G.cap)} move ${moveCap()}`);
+ L.push(`central in: steel ${S.in.steel} cem ${S.in.cem}  res: steel ${S.res.steel} cem ${S.res.cem}  quota ${r0(((S.flags.highQuota?0.30:D().quota)+(S.flags.debt&&S.year<=1965?0.06:0))*100)}%  fruit ${r1(fruitOut())}`);
+ R.forEach(r=>{ const g=REG[r], p=produceRegion(r,1), o=S.officers[r]; L.push(`${r}: pop ${r1(g.pop)} stock ${r1(g.stock)} need ${r1(g.pop*NEED*S.ration)} grain ${r1(p.grain)} cotton ${r1(p.cotton)} water ${r1(p.w*100)}% wel ${r1(g.welfare)} crowd ${r0(g.pop/(g.cap0+lv('hous',r)*45)*100)}%  ${o?o.trait+'/'+o.flaw:''}`); });
+ L.push(`next weather: ${S.dbgWx||'random'}  god: ${!!S.dbgGod}`);
+ return L.join('\n'); }
+function showDebug(){ if(!S.dbg){ openView(()=>({html:`<h3>${T('dbgTitle')}</h3><div class="dbgwarn">${T('dbgWarn')}</div><button class="choice" data-dg="on"><b>${T('dbgEnable')}</b></button><button class="choice" data-dg="no"><b>${T('rsNo')}</b></button>`,
+  esc:()=>closeCard(), h:e=>{ const d=e.target.closest('[data-dg]'); if(!d) return false; if(d.dataset.dg==='on'){ S.dbg=true; S.cheated=true; addLog(S.year,'logDbgOn'); render(); save(); closeCard(); showDebug(); return 'closed'; } return true; }})); return; }
+ openView(()=>{ const B=(id,lab,on)=>`<button class="tool${on?' on':''}" data-db="${id}">${lab}</button>`; const DL=T('dbgL');
+  const evBtns=[...EVENTS.map(e=>e.year),...RANDOM.map(e=>e.id)].map(k=>`<button class="tool" data-dev="${k}">${typeof k==='number'?k+' ':''}${ev(k).ti}</button>`).join('');
+  return {html:`<h3>${T('dbgTitle')}<span class="dbgchip">${T('dbgChip')}</span></h3><div class="yr">${T('dbgSub')}</div>
+  <div class="dbgsec">${DL.res}</div><div class="dbggrid">${B('steel','+20 '+T('bSteel'))}${B('cem','+20 '+T('bCem'))}${B('grain',DL.grain)}${B('pop',DL.pop)}${B('trU','+20 '+T('tTrust'))}${B('trD','−20 '+T('tTrust'))}${B('weU','+20 '+T('lgWel'))}${B('weD','−20 '+T('lgWel'))}</div>
+  <div class="dbgsec">${DL.time}</div><div class="dbggrid">${B('skip1',DL.skip1)}${B('skip5',DL.skip5)}</div>
+  <div class="dbgsec">${DL.wx}</div><div class="dbggrid">${['','drought','good','normal'].map(w=>B('wx:'+w,DL['wx'+(w||'rand')],(S.dbgWx||'')===w)).join('')}</div>
+  <div class="dbgsec">${DL.rules}</div><div class="dbggrid">${B('god',DL.god,S.dbgGod)}${B('show',DL.show,S.dbgShow)}${B('nohr',DL.nohr)}${B('cands',DL.cands)}</div>
+  <div class="dbgsec">${DL.build}</div><div class="dbggrid">${B('oil',DL.oil)}${B('proj',DL.proj)}${B('all1',DL.all1)}</div>
+  <div class="dbgsec">${DL.ev}</div><div class="dbggrid">${evBtns}</div>
+  <div class="dbgsec">${DL.save}</div><div class="dbggrid">${B('exp',DL.exp)}${B('imp',DL.imp)}</div><textarea class="dbgta" id="dbgta" aria-label="${DL.save}"></textarea>
+  <div class="dbggrid" style="margin-top:8px">${B('off',DL.off)}</div>
+  <button class="btn alt sm" data-dbx="1">${T('hbOk')}</button>`,
+  esc:()=>closeCard(),
+  h:e=>{ if(e.target.closest('[data-dbx]')){ closeCard(); return 'closed'; }
+   const evb=e.target.closest('[data-dev]'); if(evb){ const k=isNaN(+evb.dataset.dev)?evb.dataset.dev:+evb.dataset.dev; const src=typeof k==='number'?EVENTS.find(x=>x.year===k):RANDOM.find(x=>x.id===k); S.cheated=true; addLog(S.year,'logDbg',ev(k).ti); closeCard(); showEvent(k,src.fx,S.year); return 'closed'; }
+   const b=e.target.closest('[data-db]'); if(!b) return false; const a=b.dataset.db;
+   const act={steel:()=>{S.res.steel=r1(S.res.steel+20);},cem:()=>{S.res.cem=r1(S.res.cem+20);},grain:()=>{R.forEach(r=>REG[r].stock=Math.max(20,REG[r].pop*NEED));},pop:()=>{R.forEach(r=>REG[r].pop=r1(REG[r].pop*1.1));},
+    trU:()=>{S.trust=clamp(S.trust+20,0,100);},trD:()=>{S.trust=clamp(S.trust-20,0,100);},weU:()=>{R.forEach(r=>REG[r].welfare=clamp(REG[r].welfare+20,0,100));},weD:()=>{R.forEach(r=>REG[r].welfare=clamp(REG[r].welfare-20,0,100));},
+    god:()=>{S.dbgGod=!S.dbgGod;},show:()=>{S.dbgShow=!S.dbgShow;},nohr:()=>{S.hrUsed=null;},cands:()=>{S.hrC=null;},
+    oil:()=>{ if(sec('oil').lock){ sec('oil').lock=0; sec('oil').lvl=Math.max(1,sec('oil').lvl); } },proj:()=>{ PROJECTS.forEach(p=>{ if(!S.flags['done_'+p.id]){ S.flags['done_'+p.id]=1; S.proj[p.id]=p.years; p.apply(); } }); },
+    all1:()=>{ SECTORS.forEach(x=>{ if(x.lock&&S.year<x.lock) return; if(x.reg) R.forEach(r=>x.lvl[r]++); else x.lvl++; }); }};
+   if(a.startsWith('wx:')){ dbgAct(()=>{ S.dbgWx=a.slice(3)||null; },DL['wx'+(a.slice(3)||'rand')]); refreshView(); return false; }
+   if(a==='skip1'||a==='skip5'){ closeCard(); dbgSkip(a==='skip1'?1:5); return 'closed'; }
+   if(a==='exp'){ $('dbgta').value=JSON.stringify({S,REG,lvl:SECTORS.map(x=>({lvl:x.lvl,lock:x.lock}))}); try{ $('dbgta').select(); navigator.clipboard&&navigator.clipboard.writeText($('dbgta').value).catch(()=>{}); }catch(err){} toast('tDbgExp'); return false; }
+   if(a==='imp'){ try{ const d=JSON.parse($('dbgta').value); if(!d.S||!d.REG) throw 0; S=d.S; REG=d.REG; SECTORS.forEach((x,i)=>{ if(d.lvl&&d.lvl[i]){ x.lvl=d.lvl[i].lvl; x.lock=d.lvl[i].lock; } }); S.cheated=true; S.dbg=true; bannerKey=''; mapKey=''; render(); renderLog(); save(); toast('tDbgImp'); closeCard(); return 'closed'; }catch(err){ toast('tDbgBad'); return false; } }
+   if(a==='off'){ S.dbg=false; S.dbgShow=false; S.dbgGod=false; S.dbgWx=null; render(); save(); closeCard(); return 'closed'; }
+   if(act[a]){ dbgAct(act[a],b.textContent); refreshView(); } return false; }};
+ }); }
 function showMenu(){ openView(()=>({html:`<h3>${T('menuTitle')}</h3><div class="yr">${T('diffTag',T('diffName')[S.diff])}</div>
- <button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
- esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
+ <button class="choice" data-m="codex"><b>${T('codex')}</b></button><button class="choice" data-m="help"><b>${T('help')}</b></button><button class="choice" data-m="dbg"><b>${T('dbg')}${S.dbg?' ●':''}</b></button><button class="choice" data-m="restart"><b>${T('restart')}</b></button><button class="choice" data-m="close"><b>${T('hbOk')}</b></button>`,
+ esc:()=>closeCard(), h:e=>{ const m=e.target.closest('[data-m]'); if(!m) return false; const k=m.dataset.m; closeCard(); if(k==='help') showHelp(); else if(k==='codex') showCodex(); else if(k==='dbg') showDebug(); else if(k==='restart') $('restart').click(); return 'closed'; }})); }
 function renderLog(){ $('log').innerHTML=S.log.map(e=>{ let s=''; try{ s=T(e.k,...e.a); }catch(err){ s=''; } return `<p><b>${T('yp',e.y)}</b>${s}</p>`; }).join(''); }
 function addLog(y,k,...a){ S.log.unshift({y,k,a}); if(S.log.length>300) S.log.length=300; renderLog(); }
 let toastT=null; function toast(k,...a){ const el=$('toast'); if(!el) return; el.innerHTML=T(k,...a); el.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('on'),2800); }
@@ -1789,6 +2011,9 @@ function showHelp(after){ openView(()=>({html:`<h3>${T('hbTitle')}</h3><div clas
  esc:()=>{ closeCard(); if(after) after(); },
  h:e=>{ if(e.target.id==='hk'){ closeCard(); if(after) after(); return 'closed'; } return false; }})); }
 $('help').addEventListener('click',()=>showHelp());
+$('codexBtn').addEventListener('click',()=>showCodex());
+$('dbgBtn').addEventListener('click',()=>showDebug());
+if(document.addEventListener) document.addEventListener('keydown',e=>{ if(e.ctrlKey&&e.shiftKey&&(e.key==='D'||e.key==='d')){ e.preventDefault(); showDebug(); } });
 function preset1963(){
  REG.N.pop=330;REG.S.pop=330;REG.E.pop=52; REG.N.stock=14;REG.S.stock=6;REG.E.stock=2; REG.N.welfare=32;REG.S.welfare=26;REG.E.welfare=30;
  Object.assign(sec('irr').lvl,{N:4,S:3,E:2}); Object.assign(sec('farm').lvl,{N:7,S:5,E:1}); Object.assign(sec('cot').lvl,{N:1,S:4,E:0});
@@ -1816,6 +2041,7 @@ document.body.dataset.pane=PANE; document.body.dataset.bsub=BSUB; setSub(BSUB); 
 applyStatic();
 if(load()){ render(); renderLog(); addLog(S.year,'logLoaded'); if(!S.planBase&&(S.year-1953)%5===0) showPlanChoice(); }
 else { startYear(); newGame(); }
+try{ if(location.hash==='#debug') setTimeout(showDebug,300); if(location.hash==='#codex') setTimeout(()=>showCodex(),300); }catch(e){}
 </script>
 </body>
 </html>
