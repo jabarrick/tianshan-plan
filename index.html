@@ -1856,6 +1856,7 @@ function makeKeepsake(){
  host.remove();
  return c;
 }
+let KS_DL=null; try{ if(window.claude&&window.claude.use) window.claude.use('downloads').then(d=>{ KS_DL=d||null; }).catch(()=>{}); }catch(e){}
 function ksBlob(c){ return new Promise(res=>{ try{ c.toBlob(b=>res(b),'image/png'); }catch(e){ res(null); } }); }
 function showKeepsake(){
  let c=null; try{ c=makeKeepsake(); }catch(e){ c=null; } if(!c){ toast('shotFail'); return; }
@@ -1867,7 +1868,8 @@ function showKeepsake(){
  <button class="btn" id="ksSave">${T('shotSave')}</button>${(navigator.share&&navigator.canShare)?`<button class="btn alt" id="ksShare">${T('shotShare')}</button>`:''}<button class="btn alt sm" id="ksClose">${T('hbOk')}</button>`,
  esc:()=>back(),
  h:e=>{ const id=e.target.id;
-  if(id==='ksSave'){ const a=document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove(); toast('shotSaved'); return false; }
+  if(id==='ksSave'){ if(KS_DL){ ksBlob(c).then(b=>KS_DL.save({filename:fname,data:b||url})).then(()=>toast('shotSaved')).catch(err=>{ if(!err||err.code!=='declined') toast('shotFail'); }); return false; }
+   const a=document.createElement('a'); a.href=url; a.download=fname; document.body.appendChild(a); a.click(); a.remove(); toast('shotSaved'); return false; }
   if(id==='ksShare'){ ksBlob(c).then(b=>{ if(!b) return; const f=new File([b],fname,{type:'image/png'}); if(navigator.canShare({files:[f]})) navigator.share({files:[f],title:T('title'),text:T('shotPlay')+'https://jabarrick.github.io/tianshan-plan/'}).catch(()=>{}); else { const a=document.createElement('a'); a.href=url; a.download=fname; a.click(); } }); return false; }
   if(id==='ksClose'){ back(); return 'closed'; }
   return false; }}));
